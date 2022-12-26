@@ -1,0 +1,493 @@
+Gui:
+    Game Name: "PES 2012 3DS"
+
+option_file_data:
+    Game Identifier : "PES12_0000" # ## if your OF is for .xps or PSP or 3DS here you must enter the name of your filename
+    ENCRYPTED : False ## if your OF is for PSP or 3DS put this value to False always
+    OF_BYTE_LENGTH : 1075368 ## if your OF is for PSP or 3DS here you must enter the size of your option file decrypted
+
+    OF_BLOCK : [
+        0,  # Not needed on 3ds
+        0, # Not needed on 3ds
+        621188, # stadiums + leagues
+        718376, # Edited players
+        128, # players
+        625846, # relink on teams + team formation
+        907864, # clubs name data 
+        741192, # kits + logos
+        919744, # emblems
+    ]
+
+    OF_BLOCK_SIZE : [
+        0, # Not needed on 3ds
+        0, # Not needed on 3ds
+        4658,  # stadiums + leagues
+        22816,  # Edited players
+        618760, # players
+        92527, # relink on teams + team formation
+        11880,  # clubs name data 
+        166672,  # kits + logos
+        155624,  # emblems
+    ]
+
+Player:
+    First Unused : 4981
+
+Teams:
+    Total Nations : 60
+    Total Classic : 7
+    Total J Nations : 0
+    Total J Clubs : 1
+    Max Players In Nations : 23
+    Max Players In Clubs : 32
+    Separator Size : 1
+
+Club:
+    Size : 88
+    Max Abbr Name Size : 3
+    First Emblem : 356
+    First Club Emblem : 120
+
+Stadiums:
+    Total : 24
+    Max Lenght : 61
+
+Leagues:
+    Total : 33
+
+Kits:
+    Nation Kit Data Size : 456
+    Club Kit Data Size : 648
+    Kit Data Size : 88
+
+Shop:
+    Points Offset : 0
+    Has Background Selector : False
+    Total Backgrounds : 0
+
+NATIONS : [
+"Austria",
+"Belgium",
+"Bulgaria",
+"Croatia",
+"Czech Republic",
+"Denmark",
+"England",
+"Finland",
+"France",
+"Germany",
+"Greece",
+"Hungary",
+"Ireland",
+"Israel",
+"Italy",
+"Netherlands",
+"Northern Ireland",
+"Norway",
+"Poland",
+"Portugal",
+"Romania",
+"Russia",
+"Scotland",
+"Serbia",
+"Slovakia",
+"Slovenia",
+"Spain",
+"Sweden",
+"Switzerland",
+"Turkey",
+"Ukraine",
+"Wales",
+"Algeria",
+"Cameroon",
+"Cote d'Ivoire",
+"Egypt",
+"Ghana",
+"Nigeria",
+"South Africa",
+"Togo",
+"Canada",
+"Honduras",
+"Mexico",
+"USA",
+"Argentina",
+"Brazil",
+"Chile",
+"Colombia",
+"Ecuador",
+"Paraguay",
+"Peru",
+"Uruguay",
+"Australia",
+"China",
+"Japan",
+"North Korea",
+"Saudi Arabia",
+"South Korea",
+"United Arab Emirates",
+"New Zealand",
+
+"Monaco",
+"Benin",
+"Burkina Faso",
+"Burundi",
+"Cape Verde",
+"Central African Republic",
+"Chad",
+"Congo",
+"DR Congo",
+"Equatorial Guinea",
+"Gabon",
+"Gambia",
+"Guinea-Bissau",
+"Kenya",
+"Liberia",
+"Libya",
+"Madagascar",
+"Mozambique",
+"Niger",
+"Rwanda",
+"Sierra Leone",
+"Zambia",
+"Zimbabwe",
+"Aruba",
+"Barbados",
+"Cuba",
+"El Salvador",
+"Grenada",
+"Guadeloupe",
+"Guatemala",
+"Haiti",
+"Jamaica",
+"Martinique",
+"Netherlands Antilles",
+"Panama",
+"Sint Maarten",
+"Philippines",
+"Vietnam",
+"Solomon Islands",
+"Free Nationality",
+"Andorra",
+"Armenia",
+"Albania",
+"Belarus",
+"Bosnia and Herzegovina",
+"Cyprus",
+"Estonia",
+"Faroe Islands",
+"Georgia",
+"Iceland",
+"Kazakhstan",
+"Latvia",
+"Liechtenstein",
+"Lithuania",
+"Luxembourg",
+"Macedonia",
+"Malta",
+"Moldova",
+"Montenegro",
+"San Marino",
+"Angola",
+"Guinea",
+"Mali",
+"Morocco",
+"Senegal",
+"Tunisia",
+"Costa Rica",
+"Trinidad & Tobago",
+"Bolivia",
+"Venezuela",
+"Bahrain",
+"Iran",
+"Iraq",
+"Kuwait",
+"Oman",
+"Qatar",
+"Syria",
+"Thailand",
+"Uzbekistan",
+]
+
+CLASSIC TEAMS : [
+"Classic England",
+"Classic France",
+"Classic Germany",
+"Classic Italy",
+"Classic Netherlands",
+"Classic Argentina",
+"Classic Brazil",
+]
+
+GROWTH TYPES:
+
+    EARLY: [
+        128,
+        130,
+        141,
+        146,
+        149,
+        154,
+        164,
+        166,
+        168,
+        170,
+        174,
+        175,
+        176,
+        178,
+        188,
+        190,
+        210,
+        212,
+        244,
+        248,
+        0,
+        9,
+        49,
+        105,
+        118,
+        123,
+        124,
+        126,
+    ]
+
+    EARLY LASTING : [
+        136,
+        142,
+        148,
+        161,
+        172,
+        173,
+        189,
+        193,
+        202,
+        204,
+        220,
+        242,
+        247,
+        25,
+        51,
+        67,
+        70,
+        82,
+        88,
+        89,
+        107,
+        121,
+        127,
+    ]
+
+    STANDARD : [
+        132,
+        139,
+        144,
+        145,
+        147,
+        150,
+        152,
+        153,
+        155,
+        159,
+        162,
+        165,
+        169,
+        177,
+        179,
+        180,
+        181,
+        183,
+        187,
+        192,
+        194,
+        198,
+        200,
+        201,
+        203,
+        208,
+        213,
+        214,
+        221,
+        231,
+        234,
+        235,
+        239,
+        243,
+        245,
+        246,
+        249,
+        1,
+        3,
+        4,
+        6,
+        12,
+        16,
+        18,
+        19,
+        20,
+        26,
+        28,
+        29,
+        30,
+        31,
+        40,
+        42,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        65,
+        68,
+        69,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        83,
+        84,
+        85,
+        87,
+        94,
+        95,
+        97,
+        100,
+        101,
+        104,
+        106,
+        112,
+        114,
+        115,
+        116,
+        119,
+        120,
+        122,
+        125,
+
+    ]
+
+    STANDARD LASTING : [
+        129,
+        131,
+        135,
+        138,
+        143,
+        151,
+        160,
+        182,
+        186,
+        191,
+        195,
+        196,
+        211,
+        216,
+        223,
+        227,
+        230,
+        237,
+        240,
+        251,
+        5,
+        7,
+        11,
+        13,
+        14,
+        15,
+        23,
+        32,
+        34,
+        36,
+        38,
+        47,
+        48,
+        81,
+        91,
+        92,
+        96,
+        99,
+        108,
+        110,
+        113,
+    ]
+
+    LATE : [
+        133,
+        137,
+        140,
+        156,
+        157,
+        158,
+        163,
+        171,
+        184,
+        185,
+        199,
+        206,
+        207,
+        209,
+        215,
+        217,
+        219,
+        218,
+        225,
+        232,
+        233,
+        238,
+        241,
+        252,
+        2,
+        8,
+        17,
+        21,
+        22,
+        33,
+        35,
+        37,
+        39,
+        43,
+        44,
+        46,
+        64,
+        66,
+        71,
+        86,
+        93,
+        98,
+        102,
+        103,
+        109,
+        111,
+        117,
+    ]
+
+    LATE LASTING : [
+        134,
+        167,
+        197,
+        205,
+        224,
+        228,
+        250,
+        253,
+        254,
+        10,
+        24,
+        41,
+        90,
+    ]
+
+
+
+
+
