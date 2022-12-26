@@ -118,7 +118,6 @@ COFPES_OF_Editor/
 *.psu
 *.xps
 *.max
-*.yaml
 BISLPM-66595JWEXOPT
 *.bin
 test/
