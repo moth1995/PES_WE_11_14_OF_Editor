@@ -130,6 +130,18 @@ class PlayersTab(Frame):
             )
         )
 
+        self.team_b_table.bind(
+            "<<RightClic>>", 
+            lambda _ 
+            : 
+            self.on_table_right_click(
+                self.team_b_table, 
+                self.team_b, 
+                self.team_b_combobox,
+            )
+        )
+
+
         self.all_players_control_frame = Frame(self,)
 
 
