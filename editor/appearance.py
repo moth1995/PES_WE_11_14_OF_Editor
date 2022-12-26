@@ -1,3 +1,4 @@
+from editor.utils.constants import BODY_TYPES, BODY_TYPES_VALUES
 from .pes_stat import Stat
 
 class Appearance:
@@ -332,21 +333,18 @@ class Appearance:
         # Physical settings
         self.height = Stat(player, 41, 0, 63, "Height", "{stat} + 148 if {normalize} else {stat} - 148", min = 148, max = 220)# + 148
         self.weight = Stat(player, 42, 0, 127, "Weight", min = 1, max = 123)
-        """
-        self.neck_length = Stat(player,105-48, 2, 15, "Neck Length") - 7
-        self.neck_widxth = Stat(player,92-48, 3, 15, "Neck Widxth") - 7
-        self.shoulder_height = Stat(player,109-48, 5, 15, "Shoulder Height") -7
-        self.should_widxth = Stat(player,110-48, 1, 15, "Shoulder Widxth") - 7
-        self.chest_measu = Stat(player,105-48, 6, 15, "Chest measurement") - 7
-        self.waist_circu = Stat(player,106-48, 6, 15, "Waist Circ") -7
-        self.arm_circu = Stat(player,106-48, 2, 15, "Arm Circumferemce") - 7
-        self.leg_circu = Stat(player,107-48, 2, 15, "Leg Circumference") - 7
-        self.calf_circu = Stat(player,107-48, 6, 15, "Calf Circ") - 7
-        self.leg_length = Stat(player,108-48, 4, 15, "Leg Length") - 7
-        body_parameters = [self.neck_length, self.neck_widxth, self.shoulder_height, self.should_widxth, self.chest_measu, self.waist_circu, self.arm_circu, 
-        self.leg_circu, self.calf_circu, self.leg_length]
-        self.body_type = body_types.index(body_parameters) + 1 if body_parameters in body_types else "Edited"
-        """
+
+        self.neck_length = Stat(player, 57, 8, 15, "Neck Length", "{stat} - 7 if {normalize} else {stat} + 7", -7, 7)
+        self.neck_width = Stat(player, 44, 4, 15, "Neck Width", "{stat} - 7 if {normalize} else {stat} + 7", -7, 7)
+        self.shoulder_height = Stat(player, 61, 4, 15, "Shoulder Height", "{stat} - 7 if {normalize} else {stat} + 7", -7, 7)
+        self.should_width = Stat(player, 62, 0, 15, "Shoulder Width", "{stat} - 7 if {normalize} else {stat} + 7", -7, 7)
+        self.chest_measu = Stat(player, 58, 12, 15, "Chest Measurement", "{stat} - 7 if {normalize} else {stat} + 7", -7, 7)
+        self.waist_circumference = Stat(player, 58, 12, 15, "Waist Circumferemce", "{stat} - 7 if {normalize} else {stat} + 7", -7, 7)
+        self.arm_circumference = Stat(player, 59, 8, 15, "Arm Circumferemce", "{stat} - 7 if {normalize} else {stat} + 7", -7, 7)
+        self.leg_circumference = Stat(player, 60, 8, 15, "Leg Circumference", "{stat} - 7 if {normalize} else {stat} + 7", -7, 7)
+        self.calf_circumference = Stat(player, 60, 12, 15, "Calf Circumferemce", "{stat} - 7 if {normalize} else {stat} + 7", -7, 7)
+        self.leg_length = Stat(player, 61, 8, 15, "Leg Length", "{stat} - 7 if {normalize} else {stat} + 7", -7, 7)
+
         # Boots/Accesories
         """
         self.boot_type = Stat(player, 99-48, 9, 15, "boot type")
@@ -368,6 +366,38 @@ class Appearance:
         self.tape =  Stat(player,102-48, 4, 1, "Tape")
         """
 
+    @property
+    def body_parameters(self):
+        return (
+            self.neck_length, 
+            self.neck_width, 
+            self.shoulder_height, 
+            self.should_width, 
+            self.chest_measu, 
+            self.waist_circumference, 
+            self.arm_circumference,
+            self.leg_circumference, 
+            self.calf_circumference, 
+            self.leg_length,
+        )
+
+    @body_parameters.setter
+    def body_parameters(self, values:'list[int]'):
+        for i, body_parameter in enumerate(values):
+            self.body_parameters[i].set_value(body_parameter)
+
+    @property
+    def body_type(self):
+        body_parameters_vals = tuple(body_parameter() for body_parameter in self.body_parameters)
+        
+        return (
+            BODY_TYPES[
+                BODY_TYPES_VALUES.index(body_parameters_vals)
+            ] 
+            if body_parameters_vals in BODY_TYPES_VALUES
+            else
+            BODY_TYPES[-1]
+        )
 
     def __iter__(self):
         """

@@ -261,9 +261,19 @@ GB = 2
 PB = 3
 
 
-STATS_BG_COLOURS = ("SystemWindow", "#3bb143", "#ffff00", "#fea500", "#fe6666")
+STATS_BG_COLOURS = (
+    "SystemWindow", 
+    "#3bb143", 
+    "#ffff00", 
+    "#fea500", 
+    "#fe6666"
+)
 
-STATS_1_8_BG_COLOURS = ("SystemWindow", "#fea500", "#fe6666",)
+STATS_1_8_BG_COLOURS = (
+    "SystemWindow", 
+    "#fea500", 
+    "#fe6666",
+)
 
 
 MIN_FACE_IDX = 1
@@ -272,7 +282,7 @@ MAX_FACE_IDX = 4096
 MIN_HAIR_IDX = 1
 MAX_HAIR_IDX = 4096
 
-BODY_TYPES = [
+BODY_TYPES = (
     "1", 
     "2", 
     "3", 
@@ -282,8 +292,106 @@ BODY_TYPES = [
     "7", 
     "8", 
     "Edit",
-]
+)
 
+BODY_TYPES_VALUES = (
+    (
+        -1, 
+        0, 
+        -2, 
+        -2, 
+        -1, 
+        0, 
+        -1, 
+        1, 
+        0, 
+        -2,
+    ),
+    (
+        -2, 
+        0, 
+        1, 
+        1, 
+        2, 
+        0, 
+        1, 
+        1, 
+        0, 
+        -1,
+    ),
+    (
+        0, 
+        0, 
+        0, 
+        0, 
+        0, 
+        0, 
+        0, 
+        0, 
+        0, 
+        0,
+    ),
+    (
+        0, 
+        0, 
+        1, 
+        1, 
+        0, 
+        0, 
+        0, 
+        -1, 
+        -2, 
+        2,
+    ),
+    (
+        2,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        -2,
+        4,
+    ),
+    (
+        -3, 
+        0, 
+        3, 
+        1, 
+        0, 
+        0, 
+        2, 
+        3, 
+        2, 
+        -2,
+    ),
+    (
+        -1, 
+        0, 
+        0, 
+        2, 
+        0, 
+        0, 
+        0, 
+        1, 
+        0, 
+        2,
+    ),
+    (
+        -2, 
+        0, 
+        2, 
+        2, 
+        2, 
+        0, 
+        2, 
+        2, 
+        0,
+        2,
+    ),
+)
 
 MAIN_WINDOW_H = 700
 MAIN_WINDOW_W = 800
