@@ -45,7 +45,7 @@ class ClubTab(Frame):
         
 
     def update_color_supp(self, color_order, color_index):
-        color = SUPP_COLOURs_HEX[color_index]
+        color = SUPP_COLOURS_HEX[color_index]
         if color_order=="c1":
             self.clubs_sup_c1_lbl.configure(background=color)
         elif color_order=="c2":

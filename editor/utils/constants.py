@@ -242,7 +242,7 @@ SUPP_COLOURS = [
     "Orange",
 ]
 
-SUPP_COLOURs_HEX = [
+SUPP_COLOURS_HEX = [
     "#000000", "#0000ca", "#c20200", "#ffbfc5", "#acff2e", 
     "#aad6e6", "#fcff00", "#f7f8f5", "#7d7e7b", "#00047a", 
     "#870001", "#81007f", "#006100", "#fed500", "#fea500", 
@@ -271,6 +271,18 @@ MAX_FACE_IDX = 4096
 
 MIN_HAIR_IDX = 1
 MAX_HAIR_IDX = 4096
+
+BODY_TYPES = [
+    "1", 
+    "2", 
+    "3", 
+    "4", 
+    "5", 
+    "6", 
+    "7", 
+    "8", 
+    "Edit",
+]
 
 
 MAIN_WINDOW_H = 700
