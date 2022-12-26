@@ -203,7 +203,7 @@ class OptionFile:
         else:
             self.data = file_contents
             game_identifier = file_name
-        if game_identifier != self.config['option_file_data']['Game Identifier'] and self.extension ==".psu":
+        if game_identifier not in self.config['option_file_data']['Game Identifier'] and self.extension ==".psu":
             #print("game_identifier: %s"%game_identifier)
             #print("self.config: %s"%self.config['option_file_data']['Game Identifier'])
             raise ValueError("Invalid option file version")
