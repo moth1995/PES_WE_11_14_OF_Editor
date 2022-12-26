@@ -122,3 +122,4 @@ BISLPM-66595JWEXOPT
 *.bin
 test/
 .vscode/
+of_editor.yaml
