@@ -2,7 +2,11 @@ Gui:
     Game Name: "PES 2014 PS2 SLES_556.76 Decrypted"
 
 option_file_data:
-    Game Identifier : "BESLES-556762014OPT"
+    Game Identifier : [
+        "BESLES-556732014OPT", 
+        "BESLES-556752014OPT", 
+        "BESLES-556762014OPT", 
+    ]
     ENCRYPTED : False ## if your OF is for PSP put this value to False always
     OF_BYTE_LENGTH : 1086464
     OF_BLOCK : [
