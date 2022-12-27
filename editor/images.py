@@ -184,3 +184,54 @@ class PESImg:
     def bgr_to_bgri(self):
         for i in range(32,len(self.pes_palette),128):
             self.pes_palette[i:i+32], self.pes_palette[i+32:i+72] = self.pes_palette[i+32:i+72], self.pes_palette[i:i+32]
+
+
+class DDS:
+    data =  bytearray()
+    width = 0
+    height = 0
+
+    def __init__(self):
+        pass
+
+    def from_bytes(self, pes_image_bytes:bytearray):
+        magic_number = pes_image_bytes[:4]
+        if not self.__valid_PESImage(magic_number): 
+            raise Exception("not valid PES IMAGE")
+        size = struct.unpack("<I",pes_image_bytes[8:12])[0]
+        pes_image_bytes = pes_image_bytes[:size]
+        self.width = struct.unpack("<H",pes_image_bytes[20:22])[0]
+        self.height = struct.unpack("<H",pes_image_bytes[22:24])[0]
+        pes_idat_start = struct.unpack("<H",pes_image_bytes[16:18])[0]
+        self.data = pes_image_bytes[pes_idat_start:size]
+        self.__decrypt()
+
+    def __valid_PESImage(self,magic_number : bytearray):
+        return magic_number == PESImg.PES_IMAGE_SIGNATURE
+
+
+    def __setHeader(self):
+        self.header = b'DDS |\x00\x00\x00\x07\x10\n\x00'
+        self.header += struct.pack('<i', self.height)
+        self.header += struct.pack('<i', self.width)
+        self.header += b'\x00 \x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00 \x00\x00\x00\x04\x00\x00\x00DXT1\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+
+    def __decrypt(self):
+        for i in range(0,len(self.data),8):
+            self.data[i : i + 4], self.data[i + 4 : i + 4 + 8] = self.data[i + 4 : i + 4 + 8], self.data[i : i + 4]
+
+    @property
+    def dds(self):
+        self.__setHeader()
+        return self.header + self.data
+
+
+if __name__=="__main__":
+    file = open(r"C:\Users\marco\Documents\Visual Studio Code\PES_WE_11_14_OF_Editor\test\psp_face", "rb")
+    data = bytearray(file.read())
+    file.close()
+    dds = DDS()
+    dds.from_bytes(data)
+    dds_file = open("face.dds", "wb")
+    dds_file.write(dds.dds)
+    dds_file.close()
