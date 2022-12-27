@@ -625,7 +625,8 @@ class PlayerStatsWindow(Toplevel):
             self.player_face_idx_spinbox.config(state="disabled",from_=MIN_FACE_IDX, to=MAX_FACE_IDX)
             self.player_hair_idx_spinbox.config(state="normal",from_=MIN_HAIR_IDX, to=MAX_HAIR_IDX)
             self.player_face_idx_int_var.set(0)
-            self.player_hair_idx_int_var.set(0)
+            
+            #self.player_hair_idx_int_var.set(0)
             self.player_special_hairstyles_2_var.set(0)
             self.player_special_hairstyles_2_chk_btn.config(state="disabled")
             self.face_preview_lbl.config(
