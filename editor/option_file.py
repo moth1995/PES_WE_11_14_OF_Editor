@@ -129,6 +129,47 @@ class OptionFile:
         self.set_shop()
         self.set_free_agents()
         #print("--- %s seconds ---" % (time.time() - start_time))
+        #self.testing()
+
+
+    def testing(self):
+        """
+        Funcion para buscar valores de shift y mask de un stat
+        """
+        validate = [0, 0, 3]
+        #validate = [63,62,0]
+        print(validate)
+        test=[]
+        
+        for shift in range(0,65536):
+            #print (f"the mask is {mask}")
+            #for mask in range(0,65536):
+                #if mask==2047:
+                #    print("llegamos al punto conocido")
+                mask=15
+                test.append(
+                        Stat(self.players[158], 62, shift, mask, "Shoulder Height", "{stat} - 7 if {normalize} else {stat} + 7", -7, 7)()
+                    )
+                test.append(
+                    Stat(self.players[149], 62, shift, mask, "Shoulder Height", "{stat} - 7 if {normalize} else {stat} + 7", -7, 7)(),
+                )
+                test.append(
+                    Stat(self.players[161], 62, shift, mask, "Shoulder Height", "{stat} - 7 if {normalize} else {stat} + 7", -7, 7)(),
+                )
+
+                #test.append((get_value(of,690,offset, shift, mask, stat_name) ))
+                #test.append((get_value(of,4473,offset, shift, mask, stat_name) ))
+                #test.append((get_value(of,1485,offset, shift, mask, stat_name) ))
+                
+                #test.append((get_value(of,4521,offset, shift, mask, stat_name) ))
+                #test.append((get_value(of,1229,offset, shift, mask, stat_name) ))
+                #test.append((get_value(of,690,offset, shift, mask, stat_name) ))
+                #test.append((get_value(of,4029,offset, shift, mask, stat_name) ))
+                if test == validate:
+                    print(shift, mask)
+                test=[]
+        print("fin de la busqueda")
+
 
 
     @property
