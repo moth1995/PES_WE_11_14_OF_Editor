@@ -1,9 +1,13 @@
 import os
 from string import ascii_uppercase
+import struct
 import sys
 from tkinter import messagebox, Event
 from tkinter.ttk import Combobox
 import traceback
+import zlib
+from .constants import *
+from editor.images import PNG, PESImg
 
 def bytes_to_int(ba:bytearray, a:int):
     ia = [ba[a + i] for i in range(4)]
@@ -49,7 +53,7 @@ def resource_path(relative_path):
 
 def report_callback_exception(self, *args):
     err = traceback.format_exception(*args)
-    messagebox.showerror(self.appname + " Error Message", " ".join(err))
+    messagebox.showerror(self.appname + " Error Message", " ".join(err), parent=self)
 
 def find_in_combobox(event:Event, widget:Combobox, list_of_strings: list):
     """
@@ -77,6 +81,52 @@ def check_value(min_value,value,max_value):
     return min_value <= value <= max_value
 
 
+def read_file_to_mem(location:str):
+    try:
+        file = open(location, BINARY_READ_MODE)
+        file_contents = bytearray(file.read())
+        file.close()
+        return file_contents
+    except:
+        return bytearray()
+def write_file_from_mem(location:str, new_file_contents:"bytes|bytearray"):
+    try:
+        file = open(location, BINARY_WRITE_MODE)
+        file.write(new_file_contents)
+        file.close()
+        return True
+    except:
+        return False
 
-
+def get_face_texture(face_bin_location:str):
+    print(face_bin_location)
+    face_file_contents = read_file_to_mem(face_bin_location)
+    unzlib_face_file = bytearray(zlib.decompress(face_file_contents[32:]))
+    total_files = struct.unpack("<I", unzlib_face_file[:4])[0]
+    if total_files ==3:
+        texture_offset = struct.unpack("<I", unzlib_face_file[16:20])[0]
+    elif total_files ==2:
+        texture_offset = struct.unpack("<I", unzlib_face_file[12:16])[0]
+    else:
+        raise Exception("Unsupported face file")
+    pes_img = PESImg()
+    pes_img.from_bytes(unzlib_face_file[texture_offset:])
+    pes_img.bgr_to_bgri()
+    png_obj = PNG(pes_img, True)
+    return png_obj.png_bytes_to_tk_img()
+    
+def get_hair_texture(hair_bin_location:str):
+    print(hair_bin_location)
+    hair_file_contents = read_file_to_mem(hair_bin_location)
+    unzlib_hair_file = bytearray(zlib.decompress(hair_file_contents[32:]))
+    total_files = struct.unpack("<I", unzlib_hair_file[:4])[0]
+    if total_files ==3:
+        texture_offset = struct.unpack("<I", unzlib_hair_file[12:16])[0]
+    else:
+        raise Exception("Unsupported face file")
+    pes_img = PESImg()
+    pes_img.from_bytes(unzlib_hair_file[texture_offset:])
+    pes_img.bgr_to_bgri()
+    png_obj = PNG(pes_img, True)
+    return png_obj.png_bytes_to_tk_img()
 

@@ -1,3 +1,4 @@
+import os
 from tkinter import Button, Entry,  Frame, IntVar, Label, Listbox, Scrollbar, messagebox
 from tkinter.ttk import Combobox
 
@@ -16,6 +17,10 @@ from .custom_widgets import Table
 class PlayersTab(Frame):
 
     order_by_name = False
+    has_face_hair_folder = False
+    face_hair_folder = ""
+    face_hair_version = -1
+
 
     def __init__(self, master, option_file:OptionFile, w, h, appname):
         super().__init__(master,width=w,height=h)
@@ -260,7 +265,7 @@ class PlayersTab(Frame):
         if team_src.players[table_src_item].idx in [player.idx for player in team_dst.players if player is not None]:
             return 0
         if team_dst.total_available_slots == 0:
-            messagebox.showerror(self.appname, "Team is full you cant transfer more players here!")
+            messagebox.showerror(self.appname, "Team is full you cant transfer more players here!", parent=self )
             return 0
 
 
@@ -358,7 +363,7 @@ class PlayersTab(Frame):
             team.dorsals = team.dorsals
             self.dorsal_number_entry.config(state="readonly")
         except Exception as e:
-            messagebox.showerror(self.appname, e)
+            messagebox.showerror(self.appname, e , parent=self )
         self.trigger_update_on_teams()
 
     def swap_selected(self):
@@ -464,7 +469,7 @@ class PlayersTab(Frame):
         if self.team_a.idx == self.team_b.idx:
             return 0
         if self.team_a.max_players != self.team_b.max_players:
-            messagebox.showerror(self.appname, "Sorry, you can't Swap a National team with a Club team")
+            messagebox.showerror(self.appname, "Sorry, you can't Swap a National team with a Club team", parent=self )
             return 0
         self.team_a.players,self.team_b.players = self.team_b.players, self.team_a.players
         for player in self.team_a.players:
@@ -497,7 +502,7 @@ class PlayersTab(Frame):
             # if the player was already on the team there's not need to tranfer it again
             return 0
         if team.total_available_slots == 0:
-            messagebox.showerror(self.appname, "Team is full you cant transfer more players here!")
+            messagebox.showerror(self.appname, "Team is full you cant transfer more players here!", parent=self )
             return 0
         
         if team.is_national_team and player.national_id is not None:
@@ -628,6 +633,49 @@ class PlayersTab(Frame):
         team_config_window = TeamConfigWindow(self, team, team_cmb.get())
         team_config_window.mainloop()
 
+    def load_faces_hairs(self):
+        
+        self.faces_images = []
+        self.hair_images = []
+        face_folder = "/faces/"
+        hair_folder = "/hairs/"
+        self.faces_location = []
+        self.hairs_location = []
+        print("starting load_faces_hairs")
+        print(self.has_face_hair_folder, self.face_hair_folder, self.face_hair_version)
+        if self.has_face_hair_folder and self.face_hair_folder !="" and self.face_hair_version !=-1:
+            if (
+                os.path.isdir(self.face_hair_folder) and 
+                os.path.isdir(self.face_hair_folder+face_folder) and 
+                os.path.isdir(self.face_hair_folder+hair_folder) 
+            ):
+                self.faces_location = [self.face_hair_folder+face_folder + file for file in os.listdir(self.face_hair_folder+face_folder) if os.path.isfile(self.face_hair_folder+face_folder + file) and (file.endswith(".bin") or file.endswith(".str"))]
+                self.hairs_location = [self.face_hair_folder+hair_folder + file for file in os.listdir(self.face_hair_folder+hair_folder) if os.path.isfile(self.face_hair_folder+hair_folder + file) and (file.endswith(".bin") or file.endswith(".str"))]
+                self.faces_location.sort()
+                self.hairs_location.sort()
+                print(self.faces_location)
+                print(self.hairs_location)
+            else:
+                self.has_face_hair_folder = False
+                self.faces_location = []
+                self.hairs_location = []
+
+            """
+
+            for face in self.faces_location:
+                if self.face_hair_version==0:
+                    self.faces_images.append(common_functions.get_face_texture(face))
+                elif self.face_hair_version==1:
+                    # is PSP
+                    pass
+
+            for hair in self.hairs_location:
+                if self.face_hair_version==0:
+                    self.hair_images.append(common_functions.get_hair_texture(hair))
+                elif self.face_hair_version==1:
+                    # is PSP
+                    pass
+            """
 
     def on_lb_double_click(self):
         """

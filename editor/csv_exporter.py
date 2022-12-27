@@ -23,7 +23,9 @@ def write_players(filename:str, players:'list[Player]'):
                 + player.abilities()
                 + player.abilities_1_8()
                 + player.special_abilities()
-                + player.appearance()
+                + player.appearance()[:9]
+                + [player.appearance.body_type]
+                + [val() for val in player.appearance.body_parameters]
                 + [player.national_team_name, player.club_team_name, NO_YES[player.free_agent]]
             )
         except:

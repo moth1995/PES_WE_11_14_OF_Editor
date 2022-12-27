@@ -572,43 +572,54 @@ def load_csv(file:str, of:OptionFile):
                 csv_weight=common_functions.intTryParseStat(row[list_of_column_names.index('WEIGHT')], player.appearance.weight.name, player_idx)
                 player.appearance.weight.set_value(csv_weight)
 
-            """
             if 'BODY TYPE' in list_of_column_names:
                 csv_body_type=(row[list_of_column_names.index('BODY TYPE')])
-                if csv_body_type == "Edited":
-
+                if csv_body_type == "Edit":
                     if 'NECK LENGTH' in list_of_column_names:
-                        csv_neck_length = int(row[list_of_column_names.index('NECK LENGTH')])
+                        csv_neck_length = common_functions.intTryParseStat(row[list_of_column_names.index('NECK LENGTH')], player.appearance.neck_length.name, player_idx)
+                        player.appearance.leg_length.set_value(csv_neck_length)
 
                     if 'NECK WIDTH' in list_of_column_names:
-                        csv_neck_width = int(row[list_of_column_names.index('NECK WIDTH')])
-
+                        csv_neck_width = common_functions.intTryParseStat(row[list_of_column_names.index('NECK WIDTH')], player.appearance.neck_width.name, player_idx)
+                        player.appearance.neck_width.set_value(csv_neck_width)
+                        
                     if 'SHOULDER HEIGHT' in list_of_column_names:
-                        csv_shoulder_height = int(row[list_of_column_names.index('SHOULDER HEIGHT')])
-
+                        csv_shoulder_height = common_functions.intTryParseStat(row[list_of_column_names.index('SHOULDER HEIGHT')], player.appearance.shoulder_height.name, player_idx)
+                        player.appearance.shoulder_height.set_value(csv_shoulder_height)
+                        
                     if 'SHOULDER WIDTH' in list_of_column_names:
-                        csv_should_width = int(row[list_of_column_names.index('SHOULDER WIDTH')])
+                        csv_should_width = common_functions.intTryParseStat(row[list_of_column_names.index('SHOULDER WIDTH')], player.appearance.shoulder_width.name, player_idx)
+                        player.appearance.shoulder_width.set_value(csv_should_width)
 
                     if 'CHEST MEASUREMENT' in list_of_column_names:
-                        csv_chest_measu = int(row[list_of_column_names.index('CHEST MEASUREMENT')])
+                        csv_chest_measu = common_functions.intTryParseStat(row[list_of_column_names.index('CHEST MEASUREMENT')], player.appearance.chest_measu.name, player_idx)
+                        player.appearance.chest_measu.set_value(csv_chest_measu)
 
                     if 'WAIST CIRCUMFERENCE' in list_of_column_names:
-                        csv_waist_circu = int(row[list_of_column_names.index('WAIST CIRCUMFERENCE')])
+                        csv_waist_circu = common_functions.intTryParseStat(row[list_of_column_names.index('WAIST CIRCUMFERENCE')], player.appearance.waist_circumference.name, player_idx)
+                        player.appearance.waist_circumference.set_value(csv_waist_circu)
 
                     if 'ARM CIRCUMFERENCE' in list_of_column_names:
-                        csv_arm_circu = int(row[list_of_column_names.index('ARM CIRCUMFERENCE')])
+                        csv_arm_circu = common_functions.intTryParseStat(row[list_of_column_names.index('ARM CIRCUMFERENCE')], player.appearance.arm_circumference.name, player_idx)
+                        player.appearance.arm_circumference.set_value(csv_arm_circu)
 
                     if 'LEG CIRCUMFERENCE' in list_of_column_names:
-                        csv_leg_circu = int(row[list_of_column_names.index('LEG CIRCUMFERENCE')])
+                        csv_leg_circu = common_functions.intTryParseStat(row[list_of_column_names.index('LEG CIRCUMFERENCE')], player.appearance.leg_circumference.name, player_idx)
+                        player.appearance.leg_circumference.set_value(csv_leg_circu)
 
                     if 'CALF CIRCUMFERENCE' in list_of_column_names:
-                        csv_calf_circu = int(row[list_of_column_names.index('CALF CIRCUMFERENCE')])
+                        csv_calf_circu = common_functions.intTryParseStat(row[list_of_column_names.index('CALF CIRCUMFERENCE')], player.appearance.calf_circumference.name, player_idx)
+                        player.appearance.calf_circumference.set_value(csv_calf_circu)
 
                     if 'LEG LENGTH' in list_of_column_names:
-                        csv_leg_length = int(row[list_of_column_names.index('LEG LENGTH')])
+                        csv_leg_length = common_functions.intTryParseStat(row[list_of_column_names.index('LEG LENGTH')], player.appearance.leg_length.name, player_idx)
+                        player.appearance.leg_length.set_value(csv_leg_length)
                 else:
-                    csv_body_type=common_functions.intTryParseStat(row[list_of_column_names.index('BODY TYPE')])
-
+                    csv_body_type=row[list_of_column_names.index('BODY TYPE')]
+                    player.appearance.body_parameters = BODY_TYPES_VALUES[BODY_TYPES.index(csv_body_type)]
+                    
+                    
+            """
             # Boots/Acc.
             if 'BOOT TYPE' in list_of_column_names:
                 csv_boot_type = common_functions.intTryParseStat(row[list_of_column_names.index('BOOT TYPE')])

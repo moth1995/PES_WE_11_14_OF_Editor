@@ -1,3 +1,4 @@
+import struct
 from PIL import Image, ImageTk
 import io
 import zlib
@@ -20,11 +21,11 @@ class PNG:
     text_software = 'OF Team Editor'.encode('iso-8859-1')
     separator = bytearray(1)
 
-    def __init__(self, pes_img):
+    def __init__(self, pes_img, disable_alpha=False):
         self.pes_img = pes_img
-        self.png_from_pes_img16()
+        self.png_from_pes_img16(disable_alpha)
 
-    def png_from_pes_img16(self):
+    def png_from_pes_img16(self, disable_alpha):
         """
         Returns a PNG image from a pes image
         """
@@ -37,7 +38,7 @@ class PNG:
         plte_lenght = bytearray(len(palette_data).to_bytes(4, byteorder='big', signed=False))
         plte_crc32 = bytearray(zlib.crc32(self.PLTE + palette_data).to_bytes(4, byteorder='big', signed=False))
         plt_chunk = plte_lenght + self.PLTE + palette_data + plte_crc32
-        trns_data = self.pes_trns_to_alpha()
+        trns_data = self.pes_trns_to_alpha(disable_alpha)
         trns_lenght = bytearray(len(trns_data).to_bytes(4, byteorder='big', signed=False))
         trns_crc32 = bytearray(zlib.crc32(self.TRNS+trns_data).to_bytes(4, byteorder='big', signed=False))
         trns_chunk = trns_lenght + self.TRNS + trns_data + trns_crc32
@@ -66,11 +67,25 @@ class PNG:
             palette_data += self.pes_img.pes_palette[j : j + 3]
         return palette_data
 
-    def pes_trns_to_alpha(self):
+    def pes_trns_to_alpha(self, disable_alpha:bool):
         trns_data = bytearray()
         for j in range(3, len(self.pes_img.pes_palette), 4):
             trns_data += self.pes_img.pes_palette[j : j + 1]
+        if disable_alpha:
+            trns_data = self.__disable_alpha(trns_data)
+
         return trns_data
+
+    def __disable_alpha(self,trns_data):
+        for i in range(0,len(trns_data),1): #Solo toma los bytes de transparencia
+            value = trns_data[i]*2
+            if value >= 256: #Si el valor es (mayor o igual a 256) se resta 1 al valor
+                value = value-1
+            elif value <= 0: #Si no el valor es (menor o igual al 0) se queda en 0
+                value = 0
+            trns_data[i] = value
+        return trns_data
+
 
     def pes_px_to_idat(self):
         step = self.pes_img.width
@@ -82,7 +97,32 @@ class PNG:
         return bytearray(zlib.compress(idat_uncompress))
 
 class PESImg:
-    def __init__(self, png:bytearray):
+    def __init__(self,):
+        pass
+
+    PES_IMAGE_SIGNATURE = bytearray([0x94, 0x72, 0x85, 0x29,])
+    width = 0
+    height = 0
+    bpp = 8
+    pes_idat = bytearray()
+    pes_palette = bytearray()
+
+    def from_bytes(self, pes_image_bytes:bytearray):
+        print(type(pes_image_bytes))
+        magic_number = pes_image_bytes[:4]
+        if not self.__valid_PESImage(magic_number): 
+            raise Exception("not valid PES IMAGE")
+        size = struct.unpack("<I",pes_image_bytes[8:12])[0]
+        pes_image_bytes = pes_image_bytes[:size]
+        self.width = struct.unpack("<H",pes_image_bytes[20:22])[0]
+        self.height = struct.unpack("<H",pes_image_bytes[22:24])[0]
+        pes_palette_start = struct.unpack("<H",pes_image_bytes[18:20])[0]
+        pes_idat_start = struct.unpack("<H",pes_image_bytes[16:18])[0]
+        self.pes_palette = pes_image_bytes[pes_palette_start:pes_idat_start]
+        self.pes_idat = pes_image_bytes[pes_idat_start:size]
+
+
+    def from_png(self, png:bytearray):
         self.png = png
         self.pes_palette = bytearray()
         self.pes_idat = bytearray()
@@ -139,3 +179,9 @@ class PESImg:
         for i in range(1, len(idat), step + 1):
             self.pes_idat += idat[ i : i + step]
 
+    def __valid_PESImage(self,magic_number : bytearray):
+        return magic_number == self.PES_IMAGE_SIGNATURE
+
+    def bgr_to_bgri(self):
+        for i in range(32,len(self.pes_palette),128):
+            self.pes_palette[i:i+32], self.pes_palette[i+32:i+72] = self.pes_palette[i+32:i+72], self.pes_palette[i:i+32]

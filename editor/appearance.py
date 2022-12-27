@@ -337,13 +337,13 @@ class Appearance:
         self.neck_length = Stat(player, 57, 8, 15, "Neck Length", "{stat} - 7 if {normalize} else {stat} + 7", -7, 7)
         self.neck_width = Stat(player, 44, 4, 15, "Neck Width", "{stat} - 7 if {normalize} else {stat} + 7", -7, 7)
         self.shoulder_height = Stat(player, 61, 4, 15, "Shoulder Height", "{stat} - 7 if {normalize} else {stat} + 7", -7, 7)
-        self.should_width = Stat(player, 62, 0, 15, "Shoulder Width", "{stat} - 7 if {normalize} else {stat} + 7", -7, 7)
-        self.chest_measu = Stat(player, 58, 12, 15, "Chest Measurement", "{stat} - 7 if {normalize} else {stat} + 7", -7, 7)
+        self.shoulder_width = Stat(player, 62, 0, 15, "Shoulder Width", "{stat} - 7 if {normalize} else {stat} + 7", -7, 7)
+        self.chest_measu = Stat(player, 57, 12, 15, "Chest Measurement", "{stat} - 7 if {normalize} else {stat} + 7", -7, 7)
         self.waist_circumference = Stat(player, 58, 12, 15, "Waist Circumferemce", "{stat} - 7 if {normalize} else {stat} + 7", -7, 7)
-        self.arm_circumference = Stat(player, 59, 8, 15, "Arm Circumferemce", "{stat} - 7 if {normalize} else {stat} + 7", -7, 7)
-        self.leg_circumference = Stat(player, 60, 8, 15, "Leg Circumference", "{stat} - 7 if {normalize} else {stat} + 7", -7, 7)
-        self.calf_circumference = Stat(player, 60, 12, 15, "Calf Circumferemce", "{stat} - 7 if {normalize} else {stat} + 7", -7, 7)
-        self.leg_length = Stat(player, 61, 8, 15, "Leg Length", "{stat} - 7 if {normalize} else {stat} + 7", -7, 7)
+        self.arm_circumference = Stat(player, 58, 8, 15, "Arm Circumferemce", "{stat} - 7 if {normalize} else {stat} + 7", -7, 7)
+        self.leg_circumference = Stat(player, 59, 8, 15, "Leg Circumference", "{stat} - 7 if {normalize} else {stat} + 7", -7, 7)
+        self.calf_circumference = Stat(player, 59, 12, 15, "Calf Circumferemce", "{stat} - 7 if {normalize} else {stat} + 7", -7, 7)
+        self.leg_length = Stat(player, 60, 8, 15, "Leg Length", "{stat} - 7 if {normalize} else {stat} + 7", -7, 7)
 
         # Boots/Accesories
         """
@@ -372,7 +372,7 @@ class Appearance:
             self.neck_length, 
             self.neck_width, 
             self.shoulder_height, 
-            self.should_width, 
+            self.shoulder_width, 
             self.chest_measu, 
             self.waist_circumference, 
             self.arm_circumference,
@@ -382,14 +382,13 @@ class Appearance:
         )
 
     @body_parameters.setter
-    def body_parameters(self, values:'list[int]'):
+    def body_parameters(self, values:'tuple[int]'):
         for i, body_parameter in enumerate(values):
             self.body_parameters[i].set_value(body_parameter)
 
     @property
     def body_type(self):
         body_parameters_vals = tuple(body_parameter() for body_parameter in self.body_parameters)
-        
         return (
             BODY_TYPES[
                 BODY_TYPES_VALUES.index(body_parameters_vals)

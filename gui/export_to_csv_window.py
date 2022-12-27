@@ -1,5 +1,5 @@
 from pathlib import Path
-from tkinter import Button, Checkbutton, Frame, IntVar, Label, LabelFrame, Toplevel, filedialog, messagebox
+from tkinter import Button, Checkbutton, IntVar, Label, LabelFrame, Toplevel, filedialog, messagebox
 from tkinter.ttk import Combobox
 
 from editor.csv_exporter import create_csv, write_players
@@ -83,9 +83,9 @@ class ExportToCSVWindow(Toplevel):
             #print(filename.name)
             create_csv(filename.name)
             write_players(filename.name, players)
-            messagebox.showinfo(master=self, title=self.appname,message=f"Players exported to CSV located at {filename.name}")
+            messagebox.showinfo(parent=self, title=self.appname,message=f"Players exported to CSV located at {filename.name}")
         except Exception as e:
-            messagebox.showerror(master=self, title=self.appname,message=f"Error while saving, error type={e}, try running as admin or saving into another location")
+            messagebox.showerror(parent=self, title=self.appname,message=f"Error while saving, error type={e}, try running as admin or saving into another location")
 
 
     def stop_window(self):

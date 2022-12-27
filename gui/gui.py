@@ -11,6 +11,7 @@ from editor.utils.constants import *
 
 from gui import ClubTab, LogosTab, ShopTab, StadiumLeagueTab, PlayersTab, Config
 from gui.export_to_csv_window import ExportToCSVWindow
+from gui.face_hair_folder_window import FaceHairFolderWindow
 
 class Gui(Tk):
     appname="PES/WE OF Editor 2011-2014"
@@ -64,6 +65,7 @@ class Gui(Tk):
         self.my_menu.add_cascade(label="Edit", menu=self.edit_menu)
         self.edit_menu.add_command(label="Export to CSV", state='disabled', command=self.export_to_csv)
         self.edit_menu.add_command(label="Import from CSV", state='disabled', command=self.import_from_csv)
+        self.edit_menu.add_command(label="Select Face/Hair Folder", state='disabled', command=self.select_face_hair_folder)
         #self.edit_menu.add_command(label="Convert OF to DB (Experimental)", state='disabled', command=self.convert_of_to_db)
         self.edit_submenu = Menu(self.my_menu, tearoff=0)
         # Dinamically loading game versions as sub menu
@@ -123,6 +125,7 @@ class Gui(Tk):
         self.file_menu.entryconfig("Save as OF decrypted", state="disabled")
         self.edit_menu.entryconfig("Export to CSV", state="disabled")
         self.edit_menu.entryconfig("Import from CSV", state="disabled")
+        self.edit_menu.entryconfig("Select Face/Hair Folder", state="disabled")
         #self.edit_menu.entryconfig("Convert OF to DB (Experimental)", state="disabled")
         self.tabs_container=Notebook(self)
 
@@ -133,6 +136,7 @@ class Gui(Tk):
         # Players tab placing
         
         self.players_tab.publish()
+        self.players_tab.load_faces_hairs()
 
         # Clubs tab placing
 
@@ -232,6 +236,7 @@ class Gui(Tk):
         self.file_menu.entryconfig("Save as OF decrypted", state="normal")
         self.edit_menu.entryconfig("Export to CSV", state="normal")
         self.edit_menu.entryconfig("Import from CSV", state="normal")
+        self.edit_menu.entryconfig("Select Face/Hair Folder", state="normal")
         #self.edit_menu.entryconfig("Convert OF to DB (Experimental)", state="normal")
         self.tabs_container.destroy()
         self.tabs_container=Notebook(self)
@@ -306,32 +311,7 @@ class Gui(Tk):
         
         csv_window = ExportToCSVWindow(self, self.of)
         csv_window.mainloop()
-        
-        """
-        try:
-            filetypes = [
-                ("CSV Files", ".csv"),
-                ('All files', '*.*'),
-            ]
-            
-            filename = filedialog.asksaveasfile(
-                initialdir=self.last_working_dir,
-                title=f'{self.appname} Export to CSV', 
-                mode='w', 
-                filetypes=filetypes, 
-                defaultextension=".csv"
-            )
 
-            if filename is None:
-                return 0
-            self.last_working_dir = str(Path(filename.name).parents[0])
-            #print(filename.name)
-            create_csv(filename.name)
-            write_players(filename.name, self.of.players[1:])
-            messagebox.showinfo(title=self.appname,message=f"Players exported to CSV located at {filename.name}")
-        except Exception as e:
-            messagebox.showerror(title=self.appname,message=f"Error while saving, error type={e}, try running as admin or saving into another location")
-        """
     def import_from_csv(self):
         try:
             filetypes = [
@@ -357,6 +337,11 @@ class Gui(Tk):
             
         except Exception as e:
             print(e)
+
+    def select_face_hair_folder(self):
+        new_window = FaceHairFolderWindow(self)
+        new_window.mainloop()
+        self.players_tab.load_faces_hairs()
 
     def about(self):
         messagebox.showinfo(title=self.appname,message=
