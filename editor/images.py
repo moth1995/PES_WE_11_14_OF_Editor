@@ -185,6 +185,28 @@ class PESImg:
         for i in range(32,len(self.pes_palette),128):
             self.pes_palette[i:i+32], self.pes_palette[i+32:i+72] = self.pes_palette[i+32:i+72], self.pes_palette[i:i+32]
 
+    def psp_swizzle(self):
+        rowblocks = self.width//16
+
+        idat = bytearray(len(self.pes_idat))
+
+        for j in range(0,self.height):
+            for i in range(0, self.width):
+                blockx = i//16
+                blocky = j//8
+
+                block_index = blockx + blocky * rowblocks;
+                block_address = block_index * 128;
+
+                x = i & 15
+                y = j & 7
+                idat[block_address + x + y * 16] = self.pes_idat[i + j * self.width]
+        self.pes_idat = idat
+
+    def to_png(self, disable_alpha=False):
+        png = PNG(self, disable_alpha)
+        return png.png
+
 
 class DDS:
     data =  bytearray()
@@ -194,7 +216,7 @@ class DDS:
     def __init__(self):
         pass
 
-    def from_bytes(self, pes_image_bytes:bytearray):
+    def from_bytes(self, pes_image_bytes:bytearray, decrypt:False):
         magic_number = pes_image_bytes[:4]
         if not self.__valid_PESImage(magic_number): 
             raise Exception("not valid PES IMAGE")
@@ -204,7 +226,7 @@ class DDS:
         self.height = struct.unpack("<H",pes_image_bytes[22:24])[0]
         pes_idat_start = struct.unpack("<H",pes_image_bytes[16:18])[0]
         self.data = pes_image_bytes[pes_idat_start:size]
-        self.__decrypt()
+        if decrypt: self.__decrypt()
 
     def __valid_PESImage(self,magic_number : bytearray):
         return magic_number == PESImg.PES_IMAGE_SIGNATURE
@@ -231,7 +253,17 @@ if __name__=="__main__":
     data = bytearray(file.read())
     file.close()
     dds = DDS()
-    dds.from_bytes(data)
+    dds.from_bytes(data, True)
     dds_file = open("face.dds", "wb")
     dds_file.write(dds.dds)
+    dds_file.close()
+    
+    file = open(r"C:\Users\marco\Documents\Visual Studio Code\PES_WE_11_14_OF_Editor\test\psp_hair", "rb")
+    data = bytearray(file.read())
+    file.close()
+    pes_img = PESImg()
+    pes_img.from_bytes(data)
+    pes_img.psp_swizzle()
+    dds_file = open("hair.png", "wb")
+    dds_file.write(pes_img.to_png())
     dds_file.close()
