@@ -7,7 +7,7 @@ from tkinter.ttk import Combobox
 import traceback
 import zlib
 from .constants import *
-from editor.images import PNG, PESImg
+from editor.images import DDS, PNG, PESImg
 
 def bytes_to_int(ba:bytearray, a:int):
     ia = [ba[a + i] for i in range(4)]
@@ -98,7 +98,7 @@ def write_file_from_mem(location:str, new_file_contents:"bytes|bytearray"):
     except:
         return False
 
-def get_face_texture(face_bin_location:str):
+def get_face_texture(face_bin_location:str, platform:int):
     #print(face_bin_location)
     face_file_contents = read_file_to_mem(face_bin_location)
     unzlib_face_file = bytearray(zlib.decompress(face_file_contents[32:]))
@@ -109,13 +109,20 @@ def get_face_texture(face_bin_location:str):
         texture_offset = struct.unpack("<I", unzlib_face_file[12:16])[0]
     else:
         raise Exception("Unsupported face file")
-    pes_img = PESImg()
-    pes_img.from_bytes(unzlib_face_file[texture_offset:])
-    pes_img.bgr_to_bgri()
-    png_obj = PNG(pes_img, True)
-    return png_obj.png_bytes_to_tk_img()
-    
-def get_hair_texture(hair_bin_location:str):
+    if platform == 0: # ps2
+        pes_img = PESImg()
+        pes_img.from_bytes(unzlib_face_file[texture_offset:])
+        pes_img.bgr_to_bgri()
+        png_obj = PNG(pes_img, True)
+        return png_obj.png_bytes_to_tk_img()
+    elif platform == 1: # psp
+        dds = DDS()
+        dds.from_bytes(unzlib_face_file[texture_offset:], True)
+        return dds.tk_img
+    else:
+        raise Exception("Unsupported game version")
+
+def get_hair_texture(hair_bin_location:str, platform:int=-1):
     #print(hair_bin_location)
     hair_file_contents = read_file_to_mem(hair_bin_location)
     unzlib_hair_file = bytearray(zlib.decompress(hair_file_contents[32:]))
@@ -124,9 +131,16 @@ def get_hair_texture(hair_bin_location:str):
         texture_offset = struct.unpack("<I", unzlib_hair_file[12:16])[0]
     else:
         raise Exception("Unsupported face file")
-    pes_img = PESImg()
-    pes_img.from_bytes(unzlib_hair_file[texture_offset:])
-    pes_img.bgr_to_bgri()
-    png_obj = PNG(pes_img, True)
-    return png_obj.png_bytes_to_tk_img()
-
+    if platform == 0: # ps2
+        pes_img = PESImg()
+        pes_img.from_bytes(unzlib_hair_file[texture_offset:])
+        pes_img.bgr_to_bgri()
+        png_obj = PNG(pes_img, True)
+        return png_obj.png_bytes_to_tk_img()
+    elif platform == 1: # psp
+        pes_img = PESImg()
+        pes_img.from_bytes(unzlib_hair_file[texture_offset:])
+        pes_img.psp_swizzle()
+        return pes_img.tk_img
+    else:
+        raise Exception("Unsupported game version")

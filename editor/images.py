@@ -207,6 +207,9 @@ class PESImg:
         png = PNG(self, disable_alpha)
         return png.png
 
+    @property
+    def tk_img(self):
+        return ImageTk.PhotoImage(Image.open(io.BytesIO(self.to_png())).convert("RGBA"))
 
 class DDS:
     data =  bytearray()
@@ -216,7 +219,7 @@ class DDS:
     def __init__(self):
         pass
 
-    def from_bytes(self, pes_image_bytes:bytearray, decrypt:False):
+    def from_bytes(self, pes_image_bytes:bytearray, decrypt:bool=False):
         magic_number = pes_image_bytes[:4]
         if not self.__valid_PESImage(magic_number): 
             raise Exception("not valid PES IMAGE")
@@ -246,6 +249,10 @@ class DDS:
     def dds(self):
         self.__setHeader()
         return self.header + self.data
+
+    @property
+    def tk_img(self):
+        return ImageTk.PhotoImage(Image.open(io.BytesIO(self.dds)).convert("RGBA"))
 
 
 if __name__=="__main__":

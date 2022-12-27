@@ -519,11 +519,11 @@ class PlayerStatsWindow(Toplevel):
                     self.has_face_hair_folder and 
                     self.face_hair_folder !="" and 
                     self.face_hair_version !=-1 and 
-                    self.player_face_idx_int_var.get() - 1<= len(self.faces_location) and
-                    self.player_face_idx_int_var.get() - 1<= len(self.hairs_location)
+                    self.player_face_idx_int_var.get() - 1< len(self.faces_location) and
+                    self.player_face_idx_int_var.get() - 1< len(self.hairs_location)
                 ):
-                    self.face_img = common_functions.get_face_texture(self.faces_location[self.player_face_idx_int_var.get() - 1])
-                    self.hair_img = common_functions.get_hair_texture(self.hairs_location[self.player_face_idx_int_var.get() - 1])
+                    self.face_img = common_functions.get_face_texture(self.faces_location[self.player_face_idx_int_var.get() - 1], self.face_hair_version)
+                    self.hair_img = common_functions.get_hair_texture(self.hairs_location[self.player_face_idx_int_var.get() - 1], self.face_hair_version)
                     self.face_preview_lbl.config(
                         image=self.face_img, 
                         relief="solid", 
@@ -657,11 +657,11 @@ class PlayerStatsWindow(Toplevel):
                     self.has_face_hair_folder and 
                     self.face_hair_folder !="" and 
                     self.face_hair_version !=-1 and 
-                    self.player_face_idx_int_var.get() - 1<= len(self.faces_location) and
-                    self.player_face_idx_int_var.get() - 1<= len(self.faces_location)
+                    self.player_face_idx_int_var.get() - 1< len(self.faces_location) and
+                    self.player_face_idx_int_var.get() - 1< len(self.hairs_location)
                 ):
-                    self.face_img = common_functions.get_face_texture(self.faces_location[self.player_face_idx_int_var.get() - 1])
-                    self.hair_img = common_functions.get_hair_texture(self.hairs_location[self.player_face_idx_int_var.get() - 1])
+                    self.face_img = common_functions.get_face_texture(self.faces_location[self.player_face_idx_int_var.get() - 1], self.face_hair_version)
+                    self.hair_img = common_functions.get_hair_texture(self.hairs_location[self.player_face_idx_int_var.get() - 1], self.face_hair_version)
 
                     self.face_preview_lbl.config(
                         image=self.face_img, 
@@ -717,10 +717,10 @@ class PlayerStatsWindow(Toplevel):
                 self.face_hair_folder !="" and 
                 self.face_hair_version !=-1 and 
                 self.player_face_idx_int_var.get() - 1<= len(self.faces_location) and
-                self.player_face_idx_int_var.get() - 1<= len(self.faces_location)
+                self.player_face_idx_int_var.get() - 1<= len(self.hairs_location)
             ):
-                self.face_img = common_functions.get_face_texture(self.faces_location[self.player_face_idx_int_var.get() - 1])
-                self.hair_img = common_functions.get_hair_texture(self.hairs_location[self.player_face_idx_int_var.get() - 1])
+                self.face_img = common_functions.get_face_texture(self.faces_location[self.player_face_idx_int_var.get() - 1], self.face_hair_version)
+                self.hair_img = common_functions.get_hair_texture(self.hairs_location[self.player_face_idx_int_var.get() - 1], self.face_hair_version)
 
                 self.face_preview_lbl.config(
                     image=self.face_img, 
