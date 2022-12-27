@@ -256,13 +256,13 @@ class PlayerStatsWindow(Toplevel):
         self.import_new_face_bin_btn = Button(
             player_face_hair_preview_frame, 
             text = "Replace Face", 
-            command= lambda: self.import_face_hair_file(self.faces_location[self.player_face_idx_int_var.get() - 2])
+            command= lambda: self.import_face_hair_file(self.faces_location[self.player_face_idx_int_var.get() - 1])
         )
         self.import_new_face_bin_btn.grid(row=1, column=0, padx=5, pady=5)
         self.import_new_hair_bin_btn = Button(
             player_face_hair_preview_frame, 
             text = "Replace Hair",
-            command= lambda: self.import_face_hair_file(self.hairs_location[self.player_face_idx_int_var.get() - 2])
+            command= lambda: self.import_face_hair_file(self.hairs_location[self.player_face_idx_int_var.get() - 1])
         )
         self.import_new_hair_bin_btn.grid(row=1, column=1, padx=5, pady=5)
 
@@ -273,7 +273,7 @@ class PlayerStatsWindow(Toplevel):
             lambda _ : self.toggle_appearance_menu(0) if self.player_face_combobox.get() ==FACE_TYPE[BUILD] else self.toggle_appearance_menu(1)
         )
         self.player_face_combobox.event_generate("<<ComboboxSelected>>")
-        self.toggle_appearance_menu(2)
+        #self.toggle_appearance_menu(2)
         self.player_face_idx_int_var.trace_add("write", self.face_idx_var_tracer)
 
 
@@ -496,7 +496,8 @@ class PlayerStatsWindow(Toplevel):
             pass
 
     def set_body_parameters(self, selected_option):
-        if selected_option != "Edit":
+        print(selected_option)
+        if selected_option in BODY_TYPES[:-1]:
             new_body_parameters = BODY_TYPES_VALUES[BODY_TYPES.index(selected_option)]
             for i, body_parameter in enumerate(self.body_parameters.values()):
                 body_parameter.set(new_body_parameters[i])
@@ -518,8 +519,8 @@ class PlayerStatsWindow(Toplevel):
                     self.has_face_hair_folder and 
                     self.face_hair_folder !="" and 
                     self.face_hair_version !=-1 and 
-                    self.player_face_idx_int_var.get()<= len(self.faces_location) and
-                    self.player_face_idx_int_var.get()<= len(self.hairs_location)
+                    self.player_face_idx_int_var.get() - 1<= len(self.faces_location) and
+                    self.player_face_idx_int_var.get() - 1<= len(self.hairs_location)
                 ):
                     self.face_img = common_functions.get_face_texture(self.faces_location[self.player_face_idx_int_var.get() - 1])
                     self.hair_img = common_functions.get_hair_texture(self.hairs_location[self.player_face_idx_int_var.get() - 1])
@@ -620,9 +621,11 @@ class PlayerStatsWindow(Toplevel):
 
         """
         if case == 0:
-            self.player_face_idx_int_var.set(0)
+            #print("caso 1")
             self.player_face_idx_spinbox.config(state="disabled",from_=MIN_FACE_IDX, to=MAX_FACE_IDX)
-            self.player_hair_idx_spinbox.config(from_=MIN_HAIR_IDX, to=MAX_HAIR_IDX)
+            self.player_hair_idx_spinbox.config(state="normal",from_=MIN_HAIR_IDX, to=MAX_HAIR_IDX)
+            self.player_face_idx_int_var.set(0)
+            self.player_hair_idx_int_var.set(0)
             self.player_special_hairstyles_2_var.set(0)
             self.player_special_hairstyles_2_chk_btn.config(state="disabled")
             self.face_preview_lbl.config(
@@ -643,27 +646,64 @@ class PlayerStatsWindow(Toplevel):
             self.import_new_hair_bin_btn.config(state="disabled")
 
         elif case == 1:
+            #print("caso2")
             self.player_face_idx_spinbox.config(state="normal",from_=MIN_FACE_IDX + 1, to=MAX_FACE_IDX + 1)
-            self.player_hair_idx_spinbox.config(from_=MIN_HAIR_IDX, to=MAX_HAIR_IDX)
-            self.player_special_hairstyles_2_chk_btn.config(state="normal")
-            self.face_preview_lbl.config(
-                image=self.no_face_img, 
-                relief="solid", 
-                bg="SystemWindow",
-                width=128,
-                height=128,
-            )
-            self.hair_preview_lbl.config(
-                image=self.no_hair_img, 
-                relief="solid", 
-                bg="SystemWindow",
-                width=128, 
-                height=128,
-            )
-            self.import_new_face_bin_btn.config(state="disabled")
-            self.import_new_hair_bin_btn.config(state="disabled")
+            if self.player_special_hairstyles_2_var.get():
+                self.player_hair_idx_spinbox.config(state="disabled", from_=MIN_HAIR_IDX + 1, to=MAX_HAIR_IDX + 1)
+                self.player_special_hairstyles_2_chk_btn.config(state="normal")
+
+                if (
+                    self.has_face_hair_folder and 
+                    self.face_hair_folder !="" and 
+                    self.face_hair_version !=-1 and 
+                    self.player_face_idx_int_var.get() - 1<= len(self.faces_location) and
+                    self.player_face_idx_int_var.get() - 1<= len(self.faces_location)
+                ):
+                    self.face_img = common_functions.get_face_texture(self.faces_location[self.player_face_idx_int_var.get() - 1])
+                    self.hair_img = common_functions.get_hair_texture(self.hairs_location[self.player_face_idx_int_var.get() - 1])
+
+                    self.face_preview_lbl.config(
+                        image=self.face_img, 
+                        relief="solid", 
+                        width=128, 
+                        height=128,
+                        bg="SystemWindow",
+                    )
+                    self.hair_preview_lbl.config(
+                        image=self.hair_img, 
+                        relief="solid",
+                        width=128, 
+                        height=128,
+                        bg="SystemWindow",
+                    )
+                    self.import_new_face_bin_btn.config(state="normal")
+                    self.import_new_hair_bin_btn.config(state="normal")
+
+
+
+            else:
+                self.player_hair_idx_spinbox.config(from_=MIN_HAIR_IDX, to=MAX_HAIR_IDX)
+                self.player_special_hairstyles_2_chk_btn.config(state="normal")
+                self.import_new_face_bin_btn.config(state="disabled")
+                self.import_new_hair_bin_btn.config(state="disabled")
+                self.face_preview_lbl.config(
+                    image=self.no_face_img, 
+                    relief="solid", 
+                    bg="SystemWindow",
+                    width=128,
+                    height=128,
+                )
+                self.hair_preview_lbl.config(
+                    image=self.no_hair_img, 
+                    relief="solid", 
+                    bg="SystemWindow",
+                    width=128, 
+                    height=128,
+                )
+
 
         elif case == 2 and self.player_special_hairstyles_2_var.get():
+            #print("caso 3")
             old_value = self.player_hair_idx_int_var.get()
             self.player_face_idx_spinbox.config(state="normal",from_=MIN_FACE_IDX + 1, to=MAX_FACE_IDX + 1)
             self.player_hair_idx_spinbox.config(state="disabled", from_=MIN_HAIR_IDX + 1, to=MAX_HAIR_IDX + 1)
@@ -675,8 +715,8 @@ class PlayerStatsWindow(Toplevel):
                 self.has_face_hair_folder and 
                 self.face_hair_folder !="" and 
                 self.face_hair_version !=-1 and 
-                self.player_face_idx_int_var.get()<= len(self.faces_location) and
-                self.player_face_idx_int_var.get()<= len(self.faces_location)
+                self.player_face_idx_int_var.get() - 1<= len(self.faces_location) and
+                self.player_face_idx_int_var.get() - 1<= len(self.faces_location)
             ):
                 self.face_img = common_functions.get_face_texture(self.faces_location[self.player_face_idx_int_var.get() - 1])
                 self.hair_img = common_functions.get_hair_texture(self.hairs_location[self.player_face_idx_int_var.get() - 1])
@@ -716,6 +756,7 @@ class PlayerStatsWindow(Toplevel):
                 self.import_new_hair_bin_btn.config(state="disabled")
 
         elif case == 2 and not self.player_special_hairstyles_2_var.get():
+            #print("caso 4")
             self.player_face_idx_spinbox.config(state="normal",from_=MIN_FACE_IDX + 1, to=MAX_FACE_IDX + 1)
             self.player_hair_idx_spinbox.config(state="normal", from_=MIN_HAIR_IDX, to=MAX_HAIR_IDX)
             self.face_preview_lbl.config(

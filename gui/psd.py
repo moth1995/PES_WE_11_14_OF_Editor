@@ -248,6 +248,18 @@ class PSD():
                         #print("Found Drop Kick Style >",dk)
                         player_stats_window.player_drop_kick_style_combobox.set(dk)
                         continue
+                    if "Physique type".lower() in f.lower():
+                        psd_physique = parts[1].strip()
+                        #print("Found psd_physique >", psd_physique)
+                        player_stats_window.physique_type_cmb.set(psd_physique)
+                        player_stats_window.physique_type_cmb.event_generate("<<ComboboxSelected>>")
+                        continue
+                    if (f.lower() in [key.lower()for key in (player_stats_window.body_parameters.keys())]):
+                        body_param = self.psd_integer_parser(parts)
+                        #print("Found Drop Kick Style >",dk)
+                        player_stats_window.body_parameters[f.lower().title()].set(body_param)
+                        continue
+
                     found_stat = False
                     stat_index = -1
 
@@ -293,6 +305,12 @@ class PSD():
             if player_stats_window.positions_status_var.get(key).get() and i !=player_stats_window.player_registered_position_combobox.current():
                 positions += ", {}".format(self.position_names[1][i])
 
+        physique = "Physique type: %s\n" % (player_stats_window.physique_type_cmb.get())
+        for i, key in enumerate(player_stats_window.body_parameters.keys()):
+            physique += "{}: {}\n".format(key, player_stats_window.body_parameters.get(key).get())
+
+        
+        
         psd_string = """Name: {}
 Shirt Name: {}
 Callname: {}
@@ -329,6 +347,8 @@ Drop Kick Style: {}
 Goal Celebration 1: {}
 Goal Celebration 2: {}
 
+PHYSIQUE:
+{}
 """.format(
             *[
             player_stats_window.player_name_entry.get(),
@@ -362,7 +382,7 @@ Goal Celebration 2: {}
             common_functions.intTryParse(player_stats_window.player_drop_kick_style_combobox.get()),
             player_stats_window.player_goal_celebration_1_combobox.get(),
             player_stats_window.player_goal_celebration_2_combobox.get(),
-
+            physique,
         )
         return psd_string
     

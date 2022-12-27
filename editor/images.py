@@ -108,7 +108,6 @@ class PESImg:
     pes_palette = bytearray()
 
     def from_bytes(self, pes_image_bytes:bytearray):
-        print(type(pes_image_bytes))
         magic_number = pes_image_bytes[:4]
         if not self.__valid_PESImage(magic_number): 
             raise Exception("not valid PES IMAGE")

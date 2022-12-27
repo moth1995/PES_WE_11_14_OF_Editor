@@ -336,7 +336,7 @@ class Gui(Tk):
             messagebox.showinfo(title=self.appname,message="CSV file imported")
             
         except Exception as e:
-            print(e)
+            messagebox.showerror(title=self.appname, message=e)
 
     def select_face_hair_folder(self):
         new_window = FaceHairFolderWindow(self)

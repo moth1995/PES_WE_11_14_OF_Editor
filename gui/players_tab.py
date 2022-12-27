@@ -641,8 +641,8 @@ class PlayersTab(Frame):
         hair_folder = "/hairs/"
         self.faces_location = []
         self.hairs_location = []
-        print("starting load_faces_hairs")
-        print(self.has_face_hair_folder, self.face_hair_folder, self.face_hair_version)
+        #print("starting load_faces_hairs")
+        #print(self.has_face_hair_folder, self.face_hair_folder, self.face_hair_version)
         if self.has_face_hair_folder and self.face_hair_folder !="" and self.face_hair_version !=-1:
             if (
                 os.path.isdir(self.face_hair_folder) and 
@@ -653,8 +653,8 @@ class PlayersTab(Frame):
                 self.hairs_location = [self.face_hair_folder+hair_folder + file for file in os.listdir(self.face_hair_folder+hair_folder) if os.path.isfile(self.face_hair_folder+hair_folder + file) and (file.endswith(".bin") or file.endswith(".str"))]
                 self.faces_location.sort()
                 self.hairs_location.sort()
-                print(self.faces_location)
-                print(self.hairs_location)
+                #print(self.faces_location)
+                #print(self.hairs_location)
             else:
                 self.has_face_hair_folder = False
                 self.faces_location = []

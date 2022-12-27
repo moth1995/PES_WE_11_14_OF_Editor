@@ -99,7 +99,7 @@ def write_file_from_mem(location:str, new_file_contents:"bytes|bytearray"):
         return False
 
 def get_face_texture(face_bin_location:str):
-    print(face_bin_location)
+    #print(face_bin_location)
     face_file_contents = read_file_to_mem(face_bin_location)
     unzlib_face_file = bytearray(zlib.decompress(face_file_contents[32:]))
     total_files = struct.unpack("<I", unzlib_face_file[:4])[0]
@@ -116,7 +116,7 @@ def get_face_texture(face_bin_location:str):
     return png_obj.png_bytes_to_tk_img()
     
 def get_hair_texture(hair_bin_location:str):
-    print(hair_bin_location)
+    #print(hair_bin_location)
     hair_file_contents = read_file_to_mem(hair_bin_location)
     unzlib_hair_file = bytearray(zlib.decompress(hair_file_contents[32:]))
     total_files = struct.unpack("<I", unzlib_hair_file[:4])[0]
