@@ -101,47 +101,47 @@ def load_csv(file:str, of:OptionFile):
                 player.position.GK.set_value(csv_gk)
                 
             if 'CWP  1' in list_of_column_names:
-                csv_cbwS=common_functions.intTryParseStat(row[list_of_column_names.index('CWP  2')], player.position.CWP.name, player_idx)
+                csv_cbwS=common_functions.intTryParseStat(row[list_of_column_names.index('CWP  1')], player.position.CWP.name, player_idx)
                 player.position.CWP.set_value(csv_cbwS)
 
             if 'CBT  2' in list_of_column_names:
-                csv_cbt=common_functions.intTryParseStat(row[list_of_column_names.index('CBT  3')], player.position.CB.name, player_idx)
+                csv_cbt=common_functions.intTryParseStat(row[list_of_column_names.index('CBT  2')], player.position.CB.name, player_idx)
                 player.position.CB.set_value(csv_cbt)
 
             if 'SB  3' in list_of_column_names:
-                csv_sb=common_functions.intTryParseStat(row[list_of_column_names.index('SB  4')], player.position.SB.name, player_idx)
+                csv_sb=common_functions.intTryParseStat(row[list_of_column_names.index('SB  3')], player.position.SB.name, player_idx)
                 player.position.SB.set_value(csv_sb)
 
             if 'DMF  4' in list_of_column_names:
-                csv_dm=common_functions.intTryParseStat(row[list_of_column_names.index('DMF  5')], player.position.DM.name, player_idx)
+                csv_dm=common_functions.intTryParseStat(row[list_of_column_names.index('DMF  4')], player.position.DM.name, player_idx)
                 player.position.DM.set_value(csv_dm)
 
             if 'WB  5' in list_of_column_names:
-                csv_wb=common_functions.intTryParseStat(row[list_of_column_names.index('WB  6')], player.position.WB.name, player_idx)
+                csv_wb=common_functions.intTryParseStat(row[list_of_column_names.index('WB  5')], player.position.WB.name, player_idx)
                 player.position.WB.set_value(csv_wb)
 
             if 'CMF  6' in list_of_column_names:
-                csv_cm=common_functions.intTryParseStat(row[list_of_column_names.index('CMF  7')], player.position.CM.name, player_idx)
+                csv_cm=common_functions.intTryParseStat(row[list_of_column_names.index('CMF  6')], player.position.CM.name, player_idx)
                 player.position.CM.set_value(csv_cm)
                 
             if 'SMF  7' in list_of_column_names:
-                csv_sm=common_functions.intTryParseStat(row[list_of_column_names.index('SMF  8')], player.position.SM.name, player_idx)
+                csv_sm=common_functions.intTryParseStat(row[list_of_column_names.index('SMF  7')], player.position.SM.name, player_idx)
                 player.position.SM.set_value(csv_sm)
                 
             if 'AMF  8' in list_of_column_names:
-                csv_om=common_functions.intTryParseStat(row[list_of_column_names.index('AMF  9')], player.position.AM.name, player_idx)
+                csv_om=common_functions.intTryParseStat(row[list_of_column_names.index('AMF  8')], player.position.AM.name, player_idx)
                 player.position.AM.set_value(csv_om)
                 
             if 'WF 9' in list_of_column_names:
-                csv_wg=common_functions.intTryParseStat(row[list_of_column_names.index('WF 10')], player.position.WG.name, player_idx)
+                csv_wg=common_functions.intTryParseStat(row[list_of_column_names.index('WF 9')], player.position.WG.name, player_idx)
                 player.position.WG.set_value(csv_wg)
                 
             if 'SS  10' in list_of_column_names:
-                csv_ss=common_functions.intTryParseStat(row[list_of_column_names.index('SS  11')], player.position.SS.name, player_idx)
+                csv_ss=common_functions.intTryParseStat(row[list_of_column_names.index('SS  10')], player.position.SS.name, player_idx)
                 player.position.SS.set_value(csv_ss)
                 
             if 'CF  11' in list_of_column_names:
-                csv_cf=common_functions.intTryParseStat(row[list_of_column_names.index('CF  12')], player.position.CF.name, player_idx)
+                csv_cf=common_functions.intTryParseStat(row[list_of_column_names.index('CF  11')], player.position.CF.name, player_idx)
                 player.position.CF.set_value(csv_cf)
                 
             # Player ability settings     
