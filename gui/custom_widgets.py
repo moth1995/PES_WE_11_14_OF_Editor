@@ -1,5 +1,6 @@
 from tkinter import Canvas, Tk, Label, Frame, PhotoImage
 from PIL import ImageTk, Image
+from tkinter import Canvas, Scrollbar, Tk, Label, Frame
 import os, sys
 
 def resource_path(relative_path):
@@ -24,6 +25,29 @@ class TableExampleApp(Tk):
         t.set_column_width(1, 3)
         t.set_column_width(2, 20)
         t.set_row(3,["CB", "3", "Schiavi"])
+
+class ScrollableFrame(Frame):
+    def __init__(self, container, *args, **kwargs):
+        super().__init__(container, *args, **kwargs)
+        canvas = Canvas(self)
+        scrollbar = Scrollbar(self, orient="vertical", command=canvas.yview)
+        self.scrollable_frame = Frame(canvas)
+
+        self.scrollable_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(
+                scrollregion=canvas.bbox("all")
+            )
+        )
+
+        canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw")
+
+        canvas.configure(yscrollcommand=scrollbar.set)
+
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
+
+
 
 class Table(Frame):
     def __init__(self, parent, rows=10, columns=2, default_text=""):
