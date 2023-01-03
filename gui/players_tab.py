@@ -45,6 +45,7 @@ class PlayersTab(Frame):
         self.players_list_box = Listbox(self, height = 37, width = 30, exportselection=False)
         self.players_list_box.bind('<Double-1>',lambda _ : self.on_lb_double_click())
         self.players_list_box.bind('<<ListboxSelect>>',lambda _ : self.on_lb_click())
+        self.players_list_box.bind('<KeyPress>', self.lb_select_by_key)
         self.players_list_box_sb = Scrollbar(self.master, orient="vertical") 
         self.players_list_box_sb.config(command = self.players_list_box.yview)
         self.players_list_box.config(yscrollcommand = self.players_list_box_sb.set)
@@ -248,6 +249,16 @@ class PlayersTab(Frame):
 
         
         #self.bind("<Motion>", lambda e: self.find_widget_placing(e, self.all_players_control_frame))
+
+    def lb_select_by_key(self, event):
+        
+        for itm in range(self.players_list_box.size()):
+            if event.keysym.upper() == self.players_list_box.get(itm)[:1]:
+                self.players_list_box.selection_clear(0, "end")
+                self.players_list_box.select_set(itm)
+                self.players_list_box.see(itm)
+                self.players_list_box.event_generate('<<ListboxSelect>>')
+                break
 
 
     def set_dorsal_number_from_entry(self):
@@ -570,7 +581,6 @@ class PlayersTab(Frame):
         for i, player in enumerate(team.players):
             if player is not None:
                 player.init_stats()
-                team_table.set_row(i, [POSITION_NAMES[player.position.registered_position()], team.dorsals[i], player.name])
             else:
                 team_table.set_row(i, ["...","...","..."])
         
@@ -630,7 +640,6 @@ class PlayersTab(Frame):
     def on_table_right_click(self, table:Table, team:Team, team_cmb:Combobox):
         if team.real_idx is None:
             return 0
-        team_config_window = TeamConfigWindow(self, team, team_cmb.get())
         team_config_window.mainloop()
 
     def load_faces_hairs(self):
