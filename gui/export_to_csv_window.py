@@ -8,6 +8,7 @@ class ExportToCSVWindow(Toplevel):
 
     def __init__(self, master, of):
         super().__init__(master)
+        self.of = of
         w = 300 # width for the Tk root
         h = 150 # height for the Tk root
         ws = self.winfo_screenwidth() # width of the screen
@@ -26,30 +27,28 @@ class ExportToCSVWindow(Toplevel):
         frame = LabelFrame(self, text="Export to CSV")
         frame.pack()
         
-        include_edited_var = IntVar(frame, 1)
-        Checkbutton(frame, text="Include Edited?", variable=include_edited_var).grid(row=6,column=0,columnspan=2)
+        self.include_unused_var = IntVar(frame, 1)
+        Checkbutton(frame, text="Include Unused?", variable=self.include_unused_var).grid(row=6,column=0,columnspan=2)
+        self.include_edited_var = IntVar(frame, 1)
+        Checkbutton(frame, text="Include Edited?", variable=self.include_edited_var).grid(row=6,column=0,columnspan=2)
         
         Label(frame,text="Select Team").grid(row=0,column=0,)
-        team_name_cmb = Combobox(frame, values=of.teams_names, state="readonly")
-        team_name_cmb.grid(row=0,column=1)
-        team_name_cmb.current(0)
+        self.team_name_cmb = Combobox(frame, values=self.of.teams_names, state="readonly")
+        self.team_name_cmb.grid(row=0,column=1)
+        self.team_name_cmb.current(0)
         
         
         
         Button(
             frame, 
             text="Export team", 
-            command = lambda: self.export_to_csv(
-                of.teams[team_name_cmb.current()].players if include_edited_var.get() else [player for player in of.teams[team_name_cmb.current()].players if not player.is_edit and player is not None]
-            )
+            command = lambda: self.export_to_csv(1)
         ).grid(row=1,column=0, columnspan=2)
         
         Button(
             frame, 
             text="Export all players", 
-            command=lambda : self.export_to_csv(
-                of.players[1:] + of.edited_players if include_edited_var.get() else of.players[1:]
-            )
+            command=lambda : self.export_to_csv(2)
         ).grid(row=5,column=0,columnspan=2)
 
 
@@ -62,7 +61,7 @@ class ExportToCSVWindow(Toplevel):
         self.protocol('WM_DELETE_WINDOW', self.stop_window)
 
 
-    def export_to_csv(self, players):
+    def export_to_csv(self, type):
         try:
             filetypes = [
                 ("CSV Files", ".csv"),
@@ -82,6 +81,33 @@ class ExportToCSVWindow(Toplevel):
             self.last_working_dir = str(Path(filename.name).parents[0])
             #print(filename.name)
             create_csv(filename.name)
+            players = []
+            if type == 1:
+                if self.include_edited_var.get() and self.include_unused_var.get():
+                    players = [player for player in self.of.teams[self.team_name_cmb.current()].players if player is not None]
+                    
+                elif self.include_edited_var.get() and not self.include_unused_var.get():
+                    players = [player for player in self.of.teams[self.team_name_cmb.current()].players if player is not None and not player.is_unused]
+                    
+                elif not self.include_edited_var.get() and self.include_unused_var.get():
+                    players = [player for player in self.of.teams[self.team_name_cmb.current()].players if player is not None and not player.is_edit]
+                    
+                elif not self.include_edited_var.get() and not self.include_unused_var.get():
+                    players = [player for player in self.of.teams[self.team_name_cmb.current()].players if player is not None and not player.is_edit and not player.is_unused]
+            if type == 2:
+                player_list = self.of.players[1:] + self.of.edited_players
+                if self.include_edited_var.get() and self.include_unused_var.get():
+                    players = [player for player in player_list if player is not None]
+                    
+                elif self.include_edited_var.get() and not self.include_unused_var.get():
+                    players = [player for player in player_list if player is not None and not player.is_unused]
+                    
+                elif not self.include_edited_var.get() and self.include_unused_var.get():
+                    players = [player for player in player_list if player is not None and not player.is_edit]
+                    
+                elif not self.include_edited_var.get() and not self.include_unused_var.get():
+                    players = [player for player in player_list if player is not None and not player.is_edit and not player.is_unused]
+
             write_players(filename.name, players)
             messagebox.showinfo(parent=self, title=self.appname,message=f"Players exported to CSV located at {filename.name}")
         except Exception as e:
