@@ -1,5 +1,6 @@
 import itertools
 import os
+import struct
 import subprocess
 from pathlib import Path
 from enum import Enum, auto
@@ -46,7 +47,11 @@ class OptionFile:
         self.of_block = self.config['option_file_data']['OF_BLOCK']
         self.of_block_size = self.config['option_file_data']['OF_BLOCK_SIZE']
         self.nations = self.config['NATIONS']
+        import time
+        start_time = time.time()
+
         self.read_option_file()
+        print("--- %s seconds ---" % (time.time() - start_time))
         Player.start_address = self.config['option_file_data']['OF_BLOCK'][4]
         Player.start_address_edited = self.config['option_file_data']['OF_BLOCK'][3]
         Player.total_edit = int(self.config['option_file_data']['OF_BLOCK_SIZE'][3] / Player.size)
@@ -111,8 +116,6 @@ class OptionFile:
         Shop.TOTAL_BGS = self.config['Shop']['Total Backgrounds']
         Shop.POINTS_OFFSET_2 = self.config['Shop']['Points Offset']
 
-        import time
-        start_time = time.time()
 
         self.set_clubs()
         self.set_clubs_names()
@@ -267,8 +270,16 @@ class OptionFile:
         #self.data[5938] = 1
         #self.data[5939] = 1
         if self.encrypted:
+            import time
+            start_time = time.time()
+
+
             self.encrypt()
+            print("--- %s seconds ---" % (time.time() - start_time))
+            start_time = time.time()
+
             self.checksums()
+            print("--- %s seconds ---" % (time.time() - start_time))
 
         of_file = open(file_location, "wb")
 
@@ -291,6 +302,7 @@ class OptionFile:
         """
         Decrypt OF.
         """
+        total_keys = len(self.of_key)
         for i in range(1, len(self.of_block)):
             k = 0
             a = self.of_block[i]
@@ -298,16 +310,18 @@ class OptionFile:
                 if a + 4 > self.of_block[i] + self.of_block_size[i]:
                     break
 
-                c = bytes_to_int(self.data, a)
+                #c = bytes_to_int(self.data, a)
+                c = struct.unpack("<I", self.data[a: a +4])[0]
                 p = ((c - self.of_key[k]) + self.of_key[-1]) ^ self.of_key[-1]
-
+                """
                 self.data[a] = p & 0x000000FF
                 self.data[a + 1] = zero_fill_right_shift(p, 8) & 0x000000FF
                 self.data[a + 2] = zero_fill_right_shift(p, 16) & 0x000000FF
                 self.data[a + 3] = zero_fill_right_shift(p, 24) & 0x000000FF
-
+                """
+                self.data[a : a + 4] = struct.pack("<I",p)
                 k += 1
-                if k == len(self.of_key):
+                if k == total_keys:
                     k = 0
 
                 a += 4
@@ -323,14 +337,16 @@ class OptionFile:
                 if a + 4 > self.of_block[i] + self.of_block_size[i]:
                     break
 
-                p = bytes_to_int(self.data, a)
+                #p = bytes_to_int(self.data, a)
+                p = struct.unpack("<I", self.data[a : a + 4])[0]
                 c = self.of_key[k] + ((p ^ self.of_key[-1]) - self.of_key[-1])
-
+                """
                 self.data[a] = c & 0x000000FF
                 self.data[a + 1] = zero_fill_right_shift(c, 8) & 0x000000FF
                 self.data[a + 2] = zero_fill_right_shift(c, 16) & 0x000000FF
                 self.data[a + 3] = zero_fill_right_shift(c, 24) & 0x000000FF
-
+                """
+                self.data[a : a + 4] = struct.pack("<I", c)
                 k += 1
                 if k == len(self.of_key):
                     k = 0
@@ -347,7 +363,8 @@ class OptionFile:
             for a in range(
                 self.of_block[i], self.of_block[i] + self.of_block_size[i], 4
             ):
-                checksum += bytes_to_int(self.data, a)
+                #checksum += bytes_to_int(self.data, a)
+                checksum += struct.unpack("<I",self.data[a : a + 4])[0]
 
             self.data[self.of_block[i] - 8] = checksum & 0x000000FF
             self.data[self.of_block[i] - 7] = (
