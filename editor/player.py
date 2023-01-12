@@ -75,6 +75,16 @@ class Player:
         return self.idx >= self.first_edited_id
 
     @property
+    def is_unused(self):
+        """
+        Return true if the player is an unused player.
+        A player is deemed an unused player if its index number is greater than
+        or equal to the first unused address.
+        """
+        return self.idx >= self.first_unused
+
+
+    @property
     def offset(self):
         """
         Return player offset.
