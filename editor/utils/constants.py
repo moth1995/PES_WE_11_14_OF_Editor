@@ -116,6 +116,7 @@ CSV_COLUMNS=([
     "AGE", "STRONG FOOT", "INJURY TOLERANCE", 
     "DRIBBLE STYLE", "FREE KICK STYLE", "PK STYLE", "DROP KICK STYLE", 
     "GOAL CELEBRATION 1", "GOAL CELEBRATION 2",
+    #"SPECIAL ID", 
     "GROWTH TYPE",
 
     # Player position settings
@@ -168,7 +169,7 @@ CSV_COLUMNS=([
 ])
 
 
-ALT_ITEMS = [
+FORM_SLOTS = [
     "Normal",
     "Strategy Plan A",
     "Strategy Plan B",
@@ -402,3 +403,68 @@ MAIN_WINDOW_H = 700
 MAIN_WINDOW_W = 800
 
 
+PLAYERS_IN_TEAM = 11
+
+ROLES = {
+    0 : "GK",
+    4 : "CWP",
+    3 : "CB",
+    8 : "LB",
+    9 : "RB",
+    12 : "DMF",
+    16 : "RWB",
+    15 : "LWB",
+    19 : "CMF",
+    23 : "RMF",
+    22 : "LMF",
+    26 : "AMF",
+    29 : "LWF",
+    30 : "RWF",
+    33 : "SS",
+    38 : "CF",
+}
+
+ROLES_INT = {
+    "GK" : 0,
+    "CB" : 1,
+    "CB" : 2,
+    "CWP" : 4,
+    "CWP" : 5,
+    "CB" : 6,
+    "CB" : 7,
+    "CB" : 3,
+    "LB" : 8,
+    "RB" : 9,
+    "DMF": 10,
+    "DMF": 11,
+    "DMF": 13,
+    "DMF": 14,
+    "DMF": 12,
+    "LWB" : 15,
+    "RWB" : 16,
+    "CMF" : 17,
+    "CMF" : 18,
+    "CMF" : 20,
+    "CMF" : 21,
+    "CMF" : 19,
+    "LMF" : 22,
+    "RMF" : 23,
+    "AMF" : 24,
+    "AMF" : 25,
+    "AMF" : 27,
+    "AMF" : 28,
+    "AMF" : 26,
+    "LWF" : 29,
+    "RWF" : 30,
+    "SS" : 31,
+    "SS" : 32,
+    "SS" : 34,
+    "SS" : 35,
+    "SS" : 33,
+    "CF" : 36,
+    "CF" : 37,
+    "CF" : 38,
+    "CF" : 39,
+    "CF" : 40,
+    "CF" : 38,
+}
