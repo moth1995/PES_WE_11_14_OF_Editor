@@ -26,8 +26,23 @@ class PlayersTab(Frame):
         super().__init__(master,width=w,height=h)
         self.of = option_file
         self.appname = appname
+        
+        self.all_playeres_main_frame = Frame(self)
+        self.all_players_frame = Frame(self.all_playeres_main_frame)
+        self.teams_frame = Frame(self)
+        self.player_info_frame = Frame(self)
+        self.all_players_control_frame = Frame(self.all_playeres_main_frame)
+        self.transfer_control_frame = Frame(self)
+        
+        self.all_playeres_main_frame.grid(row=0, column=0, sticky="n", rowspan=2)
+        self.all_players_frame.grid(row=0, column=0, sticky="n")
+        self.teams_frame.grid(row=0, column=1, sticky="n")
+        self.player_info_frame.grid(row=0, column=2, rowspan=2, sticky="n")
+        self.all_players_control_frame.grid(row=1, column=0, sticky="n")
+        self.transfer_control_frame.grid(row=1, column=1, sticky="n")
+        
         self.player_filter_list = self.of.nations + PLAYER_FILTER_EXTRA
-        self.players_filter_combobox = Combobox(self, state="readonly", value=self.player_filter_list, width=30)
+        self.players_filter_combobox = Combobox(self.all_players_frame, state="readonly", value=self.player_filter_list, width=30)
         self.players_filter_combobox.set("All Players")
         self.players_filter_combobox.bind(
             '<<ComboboxSelected>>', 
@@ -42,42 +57,40 @@ class PlayersTab(Frame):
             )
         )
 
-        self.players_list_box = Listbox(self, height = 37, width = 30, exportselection=False)
+        self.players_list_box = Listbox(self.all_players_frame, height = 37, width = 30, exportselection=False)
         self.players_list_box.bind('<Double-1>',lambda _ : self.on_lb_double_click())
         self.players_list_box.bind('<<ListboxSelect>>',lambda _ : self.on_lb_click())
         self.players_list_box.bind('<KeyPress>', self.lb_select_by_key)
-        self.players_list_box_sb = Scrollbar(self.master, orient="vertical") 
+        self.players_list_box_sb = Scrollbar(self.all_players_frame, orient="vertical") 
         self.players_list_box_sb.config(command = self.players_list_box.yview)
         self.players_list_box.config(yscrollcommand = self.players_list_box_sb.set)
         # Loading all players into the listbox
         self.apply_player_filter()
 
         self.player_info_label = Label(
-            self, 
+            self.player_info_frame, 
             text="", 
             width=25, 
-            height=50, 
+            height=44, 
             anchor="nw",
             justify="left",
             background="black", 
             foreground="white",
         )
-        self.dorsal_lbl = Label(self, text= "Dorsal: ")
-        self.dorsal_lbl.place(x = 631, y = 4)
+        self.dorsal_lbl = Label(self.player_info_frame, text= "Dorsal: ")
         self.dorsal_number_var = IntVar(self, 0)
-        self.dorsal_number_entry = Entry(self, width=4,  state="readonly", textvariable= self.dorsal_number_var)
+        self.dorsal_number_entry = Entry(self.player_info_frame, width=4,  state="readonly", textvariable= self.dorsal_number_var)
         self.dorsal_number_entry.bind("<Return>", lambda _ : self.set_dorsal_number_from_entry())
-        self.dorsal_number_entry.place(x = 681, y = 4)
         self.team_a = Team(self.of, 0)
         self.team_b = Team(self.of, 0)
 
-        self.team_a_combobox = Combobox(self, state="readonly", value=self.of.teams_names, width=31)
-        self.team_b_combobox = Combobox(self, state="readonly", value=self.of.teams_names, width=31)
-        self.team_a_table = Table(self, 32, 3, "...")
+        self.team_a_combobox = Combobox(self.teams_frame, state="readonly", value=self.of.teams_names, width=31)
+        self.team_b_combobox = Combobox(self.teams_frame, state="readonly", value=self.of.teams_names, width=31)
+        self.team_a_table = Table(self.teams_frame, 32, 3, "...")
         self.team_a_table.set_column_width(0, 4)
         self.team_a_table.set_column_width(1, 3)
         self.team_a_table.set_column_width(2, 22)
-        self.team_b_table = Table(self, 32, 3, "...")
+        self.team_b_table = Table(self.teams_frame, 32, 3, "...")
         self.team_b_table.set_column_width(0, 4)
         self.team_b_table.set_column_width(1, 3)
         self.team_b_table.set_column_width(2, 22)
@@ -148,7 +161,6 @@ class PlayersTab(Frame):
         )
 
 
-        self.all_players_control_frame = Frame(self,)
 
 
         self.order_by_name_button = Button(
@@ -178,7 +190,6 @@ class PlayersTab(Frame):
         self.all_players_transfer_team_b.grid(row=1, column=1, sticky='nswe')
 
 
-        self.transfer_control_frame = Frame(self,)
         self.transfer_player_team_a_to_team_b_btn = Button(
             self.transfer_control_frame, 
             width=29,  
@@ -581,6 +592,7 @@ class PlayersTab(Frame):
         for i, player in enumerate(team.players):
             if player is not None:
                 player.init_stats()
+                team_table.set_row(i, [team.formation.roles[i] if team.formation is not None and i < team.formation.player_count else POSITION_NAMES[player.position.registered_position()], team.dorsals[i], player.name])
             else:
                 team_table.set_row(i, ["...","...","..."])
         
@@ -640,6 +652,7 @@ class PlayersTab(Frame):
     def on_table_right_click(self, table:Table, team:Team, team_cmb:Combobox):
         if team.real_idx is None:
             return 0
+        team_config_window = TeamConfigWindow(self, team, team_cmb)
         team_config_window.mainloop()
 
     def load_faces_hairs(self):
@@ -837,15 +850,14 @@ class PlayersTab(Frame):
         self.player_info_label.config(text=player_info + positions +abilities + abilities_1_8)
 
     def publish(self):
-        self.players_list_box.place(x = 2, y = 26)
-        self.players_list_box_sb.place(x = 187, y =49.5 , height = 595)
-        self.player_info_label.place(x = 631, y = 26)
-        self.players_filter_combobox.place(x = 2, y = 2)
-        self.all_players_control_frame.place(x = 2, y = 625)
-        self.team_a_combobox.place(x = 207, y = 2)
-        self.team_a_table.place(x = 207, y = 26)
-        self.team_b_table.place(x = 419, y = 26)
-        self.team_b_combobox.place(x = 419, y = 2)
-        self.transfer_control_frame.place(x = 206, y = 573)
-
+        self.players_filter_combobox.pack(anchor="n")
+        self.players_list_box.pack(side="left")
+        self.players_list_box_sb.pack(side="right", expand=1, fill="y")
+        self.dorsal_lbl.grid(row=0, column=0, sticky="nw")
+        self.dorsal_number_entry.grid(row=0, column=1, sticky="nw")
+        self.player_info_label.grid(row=1, column=0, columnspan=2, sticky="n")
+        self.team_a_combobox.grid(row=0, column=0, sticky="n")
+        self.team_b_combobox.grid(row=0, column=1, sticky="n")
+        self.team_a_table.grid(row=1, column=0, sticky="n")
+        self.team_b_table.grid(row=1, column=1, sticky="n")
 

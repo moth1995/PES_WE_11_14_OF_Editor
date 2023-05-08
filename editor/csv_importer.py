@@ -81,9 +81,13 @@ def load_csv(file:str, of:OptionFile):
                 player.basic_settings.goal_celebration_2.set_value(csv_goal_c2)
 
                 
-            if 'GROWTH TYPE' in list_of_column_names:
-                csv_growth_type=row[list_of_column_names.index('GROWTH TYPE')]
+            if 'GROWTH TYPE VALUE' in list_of_column_names:
+                csv_growth_type=common_functions.intTryParseStat(row[list_of_column_names.index('GROWTH TYPE VALUE')], player.basic_settings.growth_type.name, player_idx)
                 player.basic_settings.growth_type.set_value(csv_growth_type)
+
+            if 'SPECIAL ID' in list_of_column_names:
+                csv_special_id=common_functions.intTryParseStat(row[list_of_column_names.index('SPECIAL ID')], player.basic_settings.player_special_id.name, player_idx)
+                player.basic_settings.player_special_id.set_value(csv_special_id)
 
             # Position settings
 

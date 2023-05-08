@@ -30,7 +30,7 @@ class ExportToCSVWindow(Toplevel):
         self.include_unused_var = IntVar(frame, 1)
         Checkbutton(frame, text="Include Unused?", variable=self.include_unused_var).grid(row=6,column=0,columnspan=2)
         self.include_edited_var = IntVar(frame, 1)
-        Checkbutton(frame, text="Include Edited?", variable=self.include_edited_var).grid(row=6,column=0,columnspan=2)
+        Checkbutton(frame, text="Include Edited?", variable=self.include_edited_var).grid(row=7,column=0,columnspan=2)
         
         Label(frame,text="Select Team").grid(row=0,column=0,)
         self.team_name_cmb = Combobox(frame, values=self.of.teams_names, state="readonly")

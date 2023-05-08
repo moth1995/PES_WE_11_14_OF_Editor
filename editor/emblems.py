@@ -1,3 +1,4 @@
+import struct
 from editor.club import Club
 
 class Emblem:
@@ -108,7 +109,7 @@ class Emblem:
                         self.setLocationInternal(of, i, slot)
 
                         id = Club.first_club_emblem + i;
-                        self.of.data[adr + 4 : adr + 8] = id # falta convertir a int16 bytes
+                        self.of.data[adr + 4 : adr + 8] = struct.pack("<H",id)
                         break;
         except Exception as e :
             raise ValueError("Failed to save emblem 128:", e)
@@ -132,7 +133,7 @@ class Emblem:
                     if (loc < self.total_128 or loc >= self.total) :
                         self.setLocationInternal(of, i, self.total_128 + slot)
                         id = Club.first_club_emblem + i
-                        self.of.data[adr + 4 : adr + 8] = id # falta convertir a int16 bytes
+                        self.of.data[adr + 4 : adr + 8] = struct.pack("<H",id)
                         break;
         except Exception as e :
             raise ValueError("Failed to save emblem 16:", e)
@@ -340,7 +341,7 @@ class Emblem:
                     self.setLocationInternal(of, i, self.empty_idx_value)
                     isUpdated = True
                 else:
-                    #lowResIndexes.add(location);
+                    self.lowResIndexes.add(location);
                     self.fixIdBasedOnIndex(of, i, location);
                 
             

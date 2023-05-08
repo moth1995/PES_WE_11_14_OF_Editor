@@ -12,7 +12,8 @@ class BasicSettings:
         self.drop_kick_style = Stat(player, 6, 2, 3, "Drop Kick Style", "{stat} + 1 if {normalize} else {stat} - 1")# + 1
         self.goal_celebration_1 = Stat(player, 36, 0, 127, "Goal Celebration 1")
         self.goal_celebration_2 = Stat(player, 37, 0, 127, "Goal Celebration 2")
-        self.growth_type= Stat(player, 39, 0, 0xff, "Growth type", 8)
+        self.player_special_id = Stat(player, 38, 0, 0xff, "Player Special ID")
+        self.growth_type= Stat(player, 39, 0, 0xff, "Growth type")
 
     def __iter__(self):
         """

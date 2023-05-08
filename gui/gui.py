@@ -1,5 +1,5 @@
 import os
-import sys
+import sys, traceback
 from pathlib import Path
 from tkinter import Tk, Menu, filedialog, messagebox
 from tkinter.ttk import Notebook
@@ -157,7 +157,7 @@ class Gui(Tk):
         #self.stadium_league_tab.pack(fill="both", expand=1)
         #self.shop_tab.pack(fill="both", expand=1)
 
-        self.tabs_container.add(self.players_tab, text="Players")
+        self.tabs_container.add(self.players_tab, text="Players & Teams")
         self.tabs_container.add(self.clubs_tab, text="Clubs")
         self.tabs_container.add(self.stadium_league_tab, text="Stadiums & Leagues")
         self.tabs_container.add(self.logos_tab, text="Logos")
@@ -169,7 +169,7 @@ class Gui(Tk):
         tab = event.widget.tab('current')['text']
         if tab == 'Clubs':
             self.clubs_tab.refresh_gui()
-        if tab == 'Players':
+        if tab == 'Players & Teams':
             self.players_tab.update_teams_cmb_values()
 
         #elif tab == 'Swap Teams' or tab == 'Export/Import CSV' or tab == 'Extra':
@@ -300,7 +300,7 @@ class Gui(Tk):
             
             national_relink = open(folder_selected + "/db.bin_001", "wb")
             temp_team = Team(self.of, 0)
-            national_relink.write(self.of.data[temp_team.dorsal_start_address : temp_team.__club_dorsal_address])
+            national_relink.write(self.of.data[temp_team.dorsal_start_address : temp_team.dorsal_start_address + temp_team.first_club_slot])
             national_relink.close()
 
             messagebox.showinfo(title=self.appname,message=f"All changes saved at {folder_selected}")
@@ -336,7 +336,8 @@ class Gui(Tk):
             messagebox.showinfo(title=self.appname,message="CSV file imported")
             
         except Exception as e:
-            messagebox.showerror(title=self.appname, message=e)
+            tb_str = traceback.format_exc()
+            messagebox.showerror(title=self.appname, message= "%s\n%s" % (e, tb_str))
 
     def select_face_hair_folder(self):
         new_window = FaceHairFolderWindow(self)

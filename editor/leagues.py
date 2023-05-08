@@ -24,7 +24,8 @@ class League:
     def set_name(self, new_name):
         if 0 < len(new_name) < self.MAX_LEN:
             new_name = new_name[: self.MAX_LEN]
-            league_name_bytes = [0] * self.MAX_LEN
+            league_name_bytes = [0] * (self.MAX_LEN + 2)
+            league_name_bytes[-1] = 1
             new_name_bytes = str.encode(new_name, UTF_8,"ignore")
             league_name_bytes[: len(new_name_bytes)] = new_name_bytes
             for i, byte in enumerate(league_name_bytes):

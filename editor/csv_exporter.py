@@ -17,7 +17,9 @@ def write_players(filename:str, players:'list[Player]'):
             player.init_stats()
             csv_out.writerow(
                 [player.idx, player.name, player.shirt_name, player.callname(), player.nation()]
-                + player.basic_settings()[:-1] # we skip the growth type int value
+                #+ player.basic_settings()[:-1] # we skip the growth type int value
+                #+ [player.basic_settings.growth_type.get_growth_type_name()]
+                + player.basic_settings()
                 + [player.basic_settings.growth_type.get_growth_type_name()]
                 + player.position()
                 + player.abilities()

@@ -170,19 +170,22 @@ class PlayerStatsWindow(Toplevel):
 
         player_unknown_growth_type_label = Label(player_basic_settings_frame, text="%s value" % player.basic_settings.growth_type.name)
         player_unknown_growth_type_label.grid(row=15, column=0, sticky="e")
-        player_growth_type_value_var = IntVar(player_basic_settings_frame, player.basic_settings.growth_type())
-        player_unknown_growth_type_entry = Entry(player_basic_settings_frame, width=6, textvariable=player_growth_type_value_var)
+        self.player_growth_type_value_var = IntVar(player_basic_settings_frame, player.basic_settings.growth_type())
+        player_unknown_growth_type_entry = Entry(player_basic_settings_frame, width=6, textvariable=self.player_growth_type_value_var)
         player_unknown_growth_type_entry.grid(row=15, column=1, sticky="w")
-        player_unknown_growth_type_entry.config(state="readonly")
+        #player_unknown_growth_type_entry.config(state="readonly")
+
+        player_special_id_label = Label(player_basic_settings_frame, text="%s value" % player.basic_settings.player_special_id.name)
+        player_special_id_label.grid(row=16, column=0, sticky="e")
+        self.player_special_id_var = IntVar(player_basic_settings_frame, player.basic_settings.player_special_id())
+        player_special_id_entry = Entry(player_basic_settings_frame, width=6, textvariable=self.player_special_id_var)
+        player_special_id_entry.grid(row=16, column=1, sticky="w")
 
         self.player_growth_type_combobox.set(player.basic_settings.growth_type.get_growth_type_name())
         #self.player_growth_type_combobox.event_generate("<<ComboboxSelected>>")
         self.player_growth_type_combobox.bind(
-            "<<ComboboxSelected>>", lambda _ : player_growth_type_value_var.set(player.basic_settings.growth_type.get_growth_type_value(self.player_growth_type_combobox.get()))
+            "<<ComboboxSelected>>", lambda _ : self.player_growth_type_value_var.set(player.basic_settings.growth_type.get_growth_type_value(self.player_growth_type_combobox.get()))
         )
-
-        #player_appearance_label = Label(self, text="Quick Appearance Menu")
-        #player_appearance_label.grid(row=16, column=0, sticky="nwse", columnspan=2)
 
         player_height_label = Label(player_appearance_label_frame, text=player.appearance.height.name)
         player_height_label.grid(row=17, column=0, sticky="e")
@@ -233,11 +236,6 @@ class PlayerStatsWindow(Toplevel):
         self.player_hair_idx_int_var = IntVar(player_appearance_label_frame, player.appearance.hair())
         self.player_hair_idx_spinbox = Spinbox(player_appearance_label_frame, from_= MIN_HAIR_IDX, to = MAX_HAIR_IDX, textvariable=self.player_hair_idx_int_var, width = 5)
         self.player_hair_idx_spinbox.grid(row=24, column=1, sticky="w")
-
-        #self.player_hair_idx_entry = Entry(self, width=6)
-        #self.player_hair_idx_entry.delete(0,'end')
-        #self.player_hair_idx_entry.insert(0,player.appearance.hair())
-        #self.player_hair_idx_entry.grid(row=24, column=1, sticky="w")
 
         player_special_hairstyles_2_label = Label(player_appearance_label_frame, text=player.appearance.special_hairstyles_2.name)
         player_special_hairstyles_2_label.grid(row=25, column=0, sticky="e")
@@ -408,8 +406,7 @@ class PlayerStatsWindow(Toplevel):
                 image = self.special_abilities_img_off,
                 selectimage = self.special_abilities_img_on,
                 indicatoron = False,
-                highlightthickness = 0,
-                bd = 0,                
+                bd = 0,
             )
             chk.grid(row=column_4_row_counter, column=5, sticky="e")
             column_4_row_counter+=1
@@ -816,8 +813,9 @@ class PlayerStatsWindow(Toplevel):
         player.basic_settings.drop_kick_style.set_value(common_functions.intTryParse(self.player_drop_kick_style_combobox.get()))
         player.basic_settings.goal_celebration_1.set_value(self.player_goal_celebration_1_combobox.current())
         player.basic_settings.goal_celebration_2.set_value(self.player_goal_celebration_2_combobox.current())
-        player.basic_settings.growth_type.set_value(self.player_growth_type_combobox.get())
-
+        #player.basic_settings.growth_type.set_value(self.player_growth_type_combobox.get())
+        player.basic_settings.growth_type.set_value(self.player_growth_type_value_var.get())
+        player.basic_settings.player_special_id.set_value(self.player_special_id_var.get())
         player.appearance.face.set_value(self.player_face_combobox.get())
         player.appearance.skin_colour.set_value(common_functions.intTryParse(self.player_skin_colour_combobox.get()))
         player.appearance.head_height.set_value(common_functions.intTryParse(self.player_head_height_int_var.get()))
